@@ -1,0 +1,59 @@
+{% extends 'admin_question.html' %}
+{% load staticfiles %}
+{% block title %}题库管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" />
+    <style>
+  #draggable { width: 150px; height: 150px; padding: 0.5em; }
+  </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script  type="text/javascript">
+        window.onload=function(){
+            a=document.getElementById("user")
+            a.classList.add('active')
+            a.innerHTML='<a href="{% url 'admin_account' %}">用户管理</a><span class="sr-only">(current)</span>'
+            document.getElementsByClassName("row").Id='containment-wrapper'
+        }
+    </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
+          <h1 class="page-header">题目管理</h1>
+
+          <h2 class="sub-header">所有题目</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>学号</th>
+                  <th>姓名</th>
+                  <th>学院</th>
+                  <th>权限</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for r in user %}
+                <tr>
+                  <td>{{ r.student_id }}</td>
+                  <td>{{ r.name }}</td>
+                  <td>{{ r.school }}</td>
+                  <td>{{ r.auth }}</td>
+                  <td>
+                      <span><a href="#">detail</a></span>
+                      <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
+                      <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    </div>
+
+
+{% endblock %}

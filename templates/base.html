@@ -1,0 +1,95 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>{% block title %}base{% endblock %}</title>
+
+    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/base.css' %}" rel="stylesheet"/>
+    {% block css %}{% endblock %}
+    <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <script>
+        $(function () {
+             $.ajaxSetup({
+                headers: { "X-CSRFToken": getCookie("csrftoken") }
+                 });
+        });
+        function getCookie(name)  { 
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]); 
+    else 
+        return null; 
+    } 
+      </script>>
+  {% block js %}{% endblock %}
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" style="border-bottom: 0px">
+       <div class="container-fluid">
+         <!-- Brand and toggle get grouped for better mobile display -->
+         <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{% url 'index' %}">电路online</a>
+         </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="{%  url 'admin_question' %}">题库 </a></li>
+                <li><a href="{%  url 'admin_account' %}">用户</a></li>
+                <li><a href="{%  url 'admin_test' %}">作业</a></li>
+                <li><a href="{%  url 'admin_forum' %}">讨论</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">课程 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{%  url 'admin_syllabus' %}">教学计划</a></li>
+                        <li role="separator" class="divider"></li>
+                      <li><a href="{%  url 'admin_homework' %}">公告设置</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="{%  url 'admin_feedback' %}">网站反馈</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right" style="margin-right: 20px">
+               <form class="navbar-form navbar-left">
+                   {% csrf_token %}
+                   <input type="text" class="form-control" placeholder="Search...">
+               </form>
+               {% if request.session.is_login %}
+               <li class="dropdown navbar-right" style="width: 50px;height: 50px">
+                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 50px;height: 50px;padding: 10px 5px 5px 5px;"><img src='{{ user.Profile_photo.url }}' class="userimg img-responsive img-circle"></a>
+                 <ul class="dropdown-menu">
+                    <li><a href="#">账户管理</a></li>
+                    <li><a href="#">我的消息</a></li>
+                     {% if admin %}
+                    <li><a href="{% url 'admin' %}">用户管理</a></li>
+                     {% endif %}
+                    <li role="separator" class="divider"></li>
+                      <li><a href="{% url 'logout' %}">登出</a></li>
+                 </ul>
+                {% else %}
+                 <li><a href="{%  url 'register'%}">注册</a> </li>
+                {% endif %}
+               </li>
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    {% block content %}{% endblock %}
+    {% block outer_content %}{% endblock %}
+  </body>
+</html>

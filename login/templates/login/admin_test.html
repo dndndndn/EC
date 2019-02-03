@@ -1,0 +1,159 @@
+{% extends 'admin_base.html' %}
+{% load staticfiles %}
+{% block title %}用户管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_user.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" />
+    <style>
+  #draggable { width: 150px; height: 150px; padding: 0.5em; }
+  </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script  type="text/javascript">
+        window.onload=function(){
+            a=document.getElementById("user")
+            a.classList.add('active')
+            a.innerHTML='<a href="{% url 'admin_user' %}">用户管理</a><span class="sr-only">(current)</span>'
+            document.getElementsByClassName("row").Id='containment-wrapper'
+        }
+    </script>
+
+  <script>
+  $(function() {
+    $( "#draggable" ).draggable({ containment: "#containment",distance: 40 });
+    $.parser.parse();
+  });
+  </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
+          <h1 class="page-header">用户管理</h1>
+
+          <div class="row placeholders">
+              <div style="margin-bottom: 50px;">
+                  <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapse_Batchaddition" aria-expanded="false" aria-controls="collapse_Batchaddition" style="margin-left: 20px">
+                    批量添加
+                  </a>
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapse_Batchupdate" aria-expanded="false" aria-controls="collapse_Batchupdate" style="margin-left: 20px">
+                    批量更新
+                  </button>
+                  <div class="collapse" id="collapse_Batchaddition" style="margin-top: 30px">
+                    <div class="well">
+                        <p>批量添加用户请提交excel文件,后缀为.xlsx。样式请从此下载</p><a href=""
+                    </div>
+                  </div>
+                  <div class="collapse" id="collapse_Batchaddition" style="margin-top: 30px">
+                    <div class="well"></div>
+                  </div>
+              </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+              <h4>Label</h4>
+              <span class="text-muted">Something else</span>
+            </div>
+          </div>
+
+          <h2 class="sub-header">Section title</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>学号</th>
+                  <th>姓名</th>
+                  <th>学院</th>
+                  <th>权限</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for r in user %}
+                <tr>
+                  <td>{{ r.student_id }}</td>
+                  <td>{{ r.name }}</td>
+                  <td>{{ r.school }}</td>
+                  <td>{{ r.auth }}</td>
+                  <td>
+                      <span><a href="#">detail</a></span>
+                      <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
+                      <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block outer_content %}
+
+<div id="draggable" class="ui-widget-content " style=" position: absolute;top: 160px;left:1200px;width: 200px;z-index: 1001 ">
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+   <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          Content Filter
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit,
+      </div>
+    </div>
+   </div>
+   <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Order Filter
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        Anim pariatur cliche reprehenderit
+    </div>
+   </div>
+     <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+             Event Log
+            </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          Anim pariatur cliche reprehenderit
+        </div>
+      </div>
+     </div>
+  </div>
+</div>
+ <div style="height: 5000px; width: 1px;"></div>
+
+
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'admin_account.html' %}
+{% load staticfiles %}
+{% block title %}用户管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" />
+    <style>
+  #draggable { width: 150px; height: 150px; padding: 0.5em; }
+  </style>
+    <style>
+        .container img{
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script  type="text/javascript">
+        window.onload=function(){
+            a=document.getElementById("upload")
+            a.classList.add('active')
+            a.innerHTML='<a href="{% url 'admin_account' %}">添加用户</a><span class="sr-only">(current)</span>'
+            document.getElementsByClassName("row").Id='containment-wrapper'
+        }
+    </script>
+
+    <script>
+        function li(arg) {
+            console.log(arg);
+        }
+    </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
+
+    <input type="file" id="img" />
+    <input type="button" value="提交JQ" onclick="Uploadjq()" />
+    <input type="button" value="下载样式表" onclick="window.location.href='{% url 'download_account' %}'"/>
+    <script>
+        function Uploadjq() {
+            var dic = new FormData();
+            dic.append('target', 'upload');
+            dic.append('fafafa', document.getElementById('img').files[0]);
+            meesage=$.ajax({
+
+                url: '{% url 'account_upload' %}',
+                type: 'POST',
+                data: dic,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                dataType: 'JSON',
+                success: succFunction,
+                });
+            function succFunction(tt) {
+                alert(tt);
+            }
+        }
+    </script>
+    <ul id="list">
+    </ul>
+    </div>
+
+
+{% endblock %}

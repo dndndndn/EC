@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}管理界面{% endblock %}
+{% block css %}
+<link href="{% static 'css/admin.css' %}" rel="stylesheet">
+    {% block sub_css %}{% endblock %}
+{% endblock %}
+
+{% block js %}
+    {% block sub_js %}
+    {% endblock %}
+{% endblock %}
+{% block content %}
+    <div class="container-fluid" id="containment" style="z-index: 10000">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar" id="sidebar">
+            <li id="all"><a href="{%  url 'admin_account' %}">全部用户<span class="sr-only">(current)</span></a></li>
+            <li id="groups"><a href="{% url 'account_groups' 1 %}">用户分组</a></li>
+            <li id="upload"><a href="{% url 'account_upload' %}">添加用户</a></li>
+              {% block edit %}{% endblock %}
+          </ul>
+        </div>
+          {% block inner_content %}{% endblock %}
+
+      </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'admin_account.html' %}
+{% load staticfiles %}
+{% block title %}用户管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
+    <style>
+        #draggable {
+            width: 150px;
+            height: 150px;
+            padding: 0.5em;
+        }
+    </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            a = document.getElementById("all");
+            a.classList.add('active');
+            a.innerHTML = '<a href="{% url 'admin_account' %}">所有用户</a><span class="sr-only">(current)</span>'
+            document.getElementsByClassName("row").Id = 'containment-wrapper'
+        };
+
+        function deletes() {
+            var chk_value = [];
+            $("table").find('input[name="checkbox"]:checked').each(function () {
+                chk_value.push($(this).val());
+                $(this).parent().parent().remove();
+            });
+            alert(chk_value.length === 0 ? '你还没有选择任何内容！' : chk_value);
+            $.ajax({
+                url: '{% url 'account_all' 1 1 %}',
+                type: 'POST',
+                data: chk_value,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                dataType: 'JSON'
+            })
+        }
+
+        function allin() {
+            var box = document.getElementById('checkall');
+            if (box.checked === false) {
+                $("[name='checkbox']").prop("checked", false);
+            }
+            else {
+                $("[name='checkbox']").prop("checked", true);
+            }
+        }
+    </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">用户管理</h1>
+
+        <h2 class="sub-header">所有用户</h2>
+        <button type="button" class="btn btn-primary" onclick="deletes()">删除所选</button>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="checkall" id="checkall" onclick="allin()"></th>
+                    <th>学号</th>
+                    <th>姓名</th>
+                    <th>学院</th>
+                    <th>权限</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for r in user %}
+                    <tr>
+                        <td><input type="checkbox" name="checkbox" id="check{{ r.student_id }}"
+                                   value="{{ r.student_id }}"></td>
+                        <td>{{ r.student_id }}</td>
+                        <td>{{ r.name }}</td>
+                        <td>{{ r.school }}</td>
+                        <td>{{ r.email }}</td>
+                        <td>{{ r.password }}</td>
+                        <td>
+                            <span><a href="{% url 'account_update' r.student_id %}">detail</a></span>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div  class=" col-sm-offset-5">
+            <ul class="pagination">
+            {% if user.has_previous %}
+                <li><a href="{% url 'account_all' 0 1 %}">&laquo;</a></li>
+                <li><a href="{% url 'account_all' 0 user.previous_page_number %}">{{ user.previous_page_number }}</a></li>
+            {% endif %}
+                <li class="active"><a href="{% url 'account_all' 0 user.number %}">{{ user.number }}</a></li>
+            {% if user.has_next %}
+                <li><a href="{% url 'account_all' 0 user.next_page_number %}">{{ user.next_page_number }}</a></li>
+                <li><a href="{% url 'account_all' 0 user.paginator.num_pages %}">&raquo;</a></li>
+            {% endif %}
+            </ul>
+            <br>
+        </div>
+    </div>
+
+
+{% endblock %}

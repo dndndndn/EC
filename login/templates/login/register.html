@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block css %}<link href="{% static 'css/login.css' %}" rel="stylesheet"/>{% endblock %}
+{% block title %}注册{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <form class="form-register" action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <h2 class="text-center">欢迎注册</h2>
+                {% for r in register_form %}
+                <div class="form-group">
+                    {{ r.label_tag }}
+                    {{ r }}
+                </div>
+                {% endfor %}
+                <button type="reset" class="btn btn-default pull-left">重置</button>
+                <button type="submit" class="btn btn-default pull-right">提交</button>
+            </form>
+            {% if message %}
+                 <br><br><div class="alert alert-warning">{{ message }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
