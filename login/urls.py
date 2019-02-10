@@ -24,11 +24,12 @@ urlpatterns = [
     path('question/', include([
         path(r'',views.admin_question),
         path(r'all/',views.admin_question,name='admin_question'),
-        path(r'all/(<list>[0-9]{8})-page-(<num>[0-9]{4})/',views.admin_question_all,name='question_all'),
-        path(r'update/(<num>[0-9]{6})/',views.admin_question_update,name='question_update'),
+        path(r'all/<int:tag>-page-<int:page>/', views.admin_question_all, name='question_all'),
+        path(r'update:<int:num>/', views.admin_question_update, name='question_update'),
         path(r'groups/(<num>[0-9]{4})/',views.admin_question_groups,name='question_groups'),
         path(r'upload/',views.admin_question_upload,name='question_upload'),
         path(r'search/<str:arg>/',views.admin_question_search,name='question_search'),
+        path(r'download/', views.question_download, name='download_account')
         ])),
     path('account/', include([
         path(r'',views.admin_account),
@@ -37,7 +38,7 @@ urlpatterns = [
         path(r'update:<int:num>/',views.admin_account_update,name='account_update'),
         path(r'groups/(<num>[0-9]{4})/',views.admin_account_groups,name='account_groups'),
         path(r'upload/',views.admin_account_upload,name='account_upload'),
-        path(r'download/',views.download,name='download_account')
+        path(r'download/', views.account_download, name='download_account')
     ])),
     path('test/', views.admin_test,name='admin_test'),
     path('forum/', views.admin_forum,name='admin_forum'),

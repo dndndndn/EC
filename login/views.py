@@ -193,7 +193,7 @@ def admin_account_upload(request):
     return response
 
 
-def download(request):
+def account_download(request):
     file_path = r'G:\server\EC\store\download\用户表.xlsx'
     file_name = 'as.xlsx'
 
@@ -242,6 +242,26 @@ def admin_question_search(request):
     user = models.User.objects.all()
     # redirect to all
     return render(request, 'login/admin_question_all.html', locals())
+
+
+def question_download(request):
+    file_path = r'G:\server\EC\store\download\用户表.xlsx'
+    file_name = 'as.xlsx'
+
+    def file_itertor(file_name, chunk_size=512):
+        with open(file_name, 'rb') as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+
+    response = StreamingHttpResponse(file_itertor(file_path))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+    print(response)
+    return response
 
 
 def admin_test(request):
