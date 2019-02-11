@@ -1,4 +1,4 @@
-{% extends 'admin_account.html' %}
+{% extends 'admin_question.html' %}
 {% load staticfiles %}
 {% block title %}添加题目{% endblock %}
 {% block sub_css %}
@@ -7,6 +7,11 @@
     <style>
         ul {
             list-style-type: none
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
         }
     </style>
 {% endblock %}
@@ -57,36 +62,52 @@
 
             function add_stemtxt() {
                 steml++;
-                var inhtml = $("<li></li>").html("<textarea id='" + "txtstem" + steml + "' style='width:500px; height:200px;'></textarea>");
+                var inhtml = $("<li></li>").html(
+                    "<textarea id='" + "txtstem" + steml + "' style='width:500px; height:200px;'></textarea>" +
+                    "<span onclick=\"delete_stem(\'" + "txtstem" + steml + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+                );
                 $("#endstem").before(inhtml);
             }
 
             function add_stemimg() {
                 steml++;
-                var inhtml = $("<li></li>").html("<input id='" + "imgstem" + steml + "'type='file'/>");
+                var inhtml = $("<li></li>").html(
+                    "<input id='" + "imgstem" + steml +
+                    "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                    "<img id=\"preimgstem" + steml + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">" +
+                    "<span onclick=\"delete_stem(\'" + "imgstem" + steml + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+                );
                 $("#endstem").before(inhtml);
             }
 
             function add_Mainsolution_txt() {
                 mains++;
-                var inhtml = $("<li></li>").html("<textarea id='" + "txtsolu" + mains + "' style='width:500px; height:200px;'></textarea>");
+                var inhtml = $("<li></li>").html(
+                    "<textarea id='" + "txtsolu" + mains + "' style='width:500px; height:200px;'></textarea>" +
+                    "<span onclick=\"delete_stem(\'" + "txtsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+                );
                 $("#endsolu").before(inhtml);
             }
 
             function add_Mainsolution_img() {
                 mains++;
-                var inhtml = $("<li></li>").html("<input id='" + "imgsolu" + mains + "'type='file'/>");
+                var inhtml = $("<li></li>").html(
+                    "<input id='" + "imgsolu" + mains +
+                    "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                    "<img id=\"preimgsolu" + mains + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">" +
+                    "<span onclick=\"delete_stem(\'" + "imgsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+                );
                 $("#endsolu").before(inhtml);
             }
 
             function add_chioce() {
                 chioce++;
-                var inhtml = $("<li></li>").attr({"id": "chioce" + chioce});
+                var inhtml = $("<li></li>").attr({"id": "chioce" + chioce, "class": "chioce"});
                 inhtml.html(
                     "<ul>" +
                     "<li id=\"endchioce" + chioce + "\"><span onclick=\"add_chiocetxt(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加文本选项   </span></li>" +
                     "            <li><span onclick=\"add_chioceimg(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加图片选项   </span></li>" +
-                    "<li><span onclick=\"delete_chioce(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">删除选项   </span></li>" +
+                    "<li><span onclick=\"delete_chioce(" + chioce + ")\" class=\"glyphicon glyphicon-remove\">删除选项   </span></li>" +
                     "</ul>");
                 $("#chioce_list").append(inhtml);
             }
@@ -94,6 +115,12 @@
             function delete_chioce(num) {
                 $("#chioce" + num).remove();
             }
+
+            function delete_stem(id) {
+                console.log(id);
+                $("#" + id).parent().remove();
+            }
+
 
             function add_chiocetxt(num) {
                 var inhtml = $("<li></li>").html("<textarea id='" + "txtchioce" + num + "' style='width:500px; height:200px;'></textarea>");
@@ -106,7 +133,11 @@
             }
 
             function add_chioceimg(num) {
-                var inhtml = $("<li></li>").html("<input id='" + "imgchioce" + num + "'type='file'/>");
+                var inhtml = $("<li></li>").html(
+                    "<input id='" + "imgchioce" + num +
+                    "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                    "<img id=\"preimgchioce" + num + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">"
+                );
                 var a = $("#endchioce" + num);
                 a.before(inhtml);
                 inhtml = $("<li></li>").html("<input id='" + "chiocecorrect" + num + "'type='checkbox' value=\"True\"/>");
@@ -114,9 +145,19 @@
                 a.next().remove();
                 a.remove()
             }
+
             function uploadnew() {
 
             }
+
+            function changepic(obj) {
+                console.log(obj.files[0]);//这里可以获取上传文件的name
+                console.log("#pre" + obj.id);
+                a = $("#" + obj.id);
+                a.next().attr({"src": URL.createObjectURL(obj.files[0])});
+                console.log(a);
+            }
+
         </script>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #dca7a7">
