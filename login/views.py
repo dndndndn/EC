@@ -217,7 +217,7 @@ def admin_question(request):
     return redirect((reverse('question_all', args=('0000', '0001'))))
 
 
-def admin_question_all(request, list, num):
+def admin_question_all(request, tag, page):
     user = models.User.objects.all()
     return render(request, 'login/admin_question_all.html', locals())
 
@@ -235,7 +235,7 @@ def admin_question_groups(request):
 def admin_question_upload(request):
     user = models.User.objects.all()
     # redirect to all
-    return render(request, 'login/admin_question_all.html', locals())
+    return render(request, 'login/admin_question_upload.html', locals())
 
 
 def admin_question_search(request):

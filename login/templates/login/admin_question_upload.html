@@ -1,30 +1,17 @@
 {% extends 'admin_account.html' %}
 {% load staticfiles %}
-{% block title %}用户管理{% endblock %}
+{% block title %}添加题目{% endblock %}
 {% block sub_css %}
     <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
-    <style>
-        #draggable {
-            width: 150px;
-            height: 150px;
-            padding: 0.5em;
-        }
-    </style>
-    <style>
-        .container img {
-            width: 200px;
-            height: 200px;
-        }
-    </style>
 {% endblock %}
 {% block sub_js %}
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script type="text/javascript">
         window.onload = function () {
-            a = document.getElementById("upload")
-            a.classList.add('active')
-            a.innerHTML = '<a href="{% url 'admin_account' %}">添加用户</a><span class="sr-only">(current)</span>'
+            a = document.getElementById("upload");
+            a.classList.add('active');
+            a.innerHTML = '<a href="{% url 'admin_account' %}">添加题目</a><span class="sr-only">(current)</span>';
             document.getElementsByClassName("row").Id = 'containment-wrapper'
         }
     </script>
@@ -37,11 +24,11 @@
 {% endblock %}
 {% block inner_content %}
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #5bc0de">
 
         <input type="file" id="img"/>
         <input type="button" value="提交JQ" onclick="Uploadjq()"/>
-        <input type="button" value="下载样式表" onclick="window.location.href='{% url 'download_account' %}'"/>
+        <input type="button" value="下载样例" onclick="window.location.href='{% url 'download_account' %}'"/>
         <script>
             function Uploadjq() {
                 var dic = new FormData();
@@ -63,9 +50,47 @@
                 }
             }
         </script>
-        <ul id="list">
+        <script>
+            var length = 0;
+
+            function add_Maintext() {
+                length++;
+                var intxt = $("<li></li>").html("<input id='" + length + "'type='text' style='width:500px; height:200px;'/>");
+                $("#endMain").before(intxt);
+            }
+
+            function add_Mainimage() {
+                length++;
+                var intxt = $("<li></li>").html("<input id='" + length + "'type='file'/>");
+                $("#endMain").before(intxt);
+            }
+
+            function add_Mainsolution_text() {
+
+            }
+
+            function add_subquestion() {
+
+            }
+
+            function uploadnew() {
+
+            }
+        </script>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #dca7a7">
+        <input type="button" value="提交JQ" onclick="Uploadnew()"/>
+        <ul id="Main" style="list-style-type:none">
+            <li id="endMain"><span onclick="add_Maintext()" class="glyphicon glyphicon-plus">添加文本题干   </span></li>
+            <li><span onclick="add_Mainimage()" class="glyphicon glyphicon-plus">添加图片题干   </span></li>
+            <li><span onclick="add_Mainsolution()" class="glyphicon glyphicon-plus">添加文字解答   </span></li>
+            <li><span onclick="add_Mainimage()" class="glyphicon glyphicon-plus">添加图片解答   </span></li>
         </ul>
     </div>
-
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #4cae4c">
+        <ul id="sub" style="list-style-type: inherit">
+            <li><span onclick="add_subquestion()" class="glyphicon glyphicon-plus">添加小问   </span></li>
+        </ul>
+    </div>
 
 {% endblock %}
