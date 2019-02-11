@@ -4,6 +4,11 @@
 {% block sub_css %}
     <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
+    <style>
+        ul {
+            list-style-type: none
+        }
+    </style>
 {% endblock %}
 {% block sub_js %}
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
@@ -16,11 +21,6 @@
         }
     </script>
 
-    <script>
-        function li(arg) {
-            console.log(arg);
-        }
-    </script>
 {% endblock %}
 {% block inner_content %}
 
@@ -51,28 +51,69 @@
             }
         </script>
         <script>
-            var length = 0;
+            var steml = 0;
+            var mains = 0;
+            var chioce = 0;
 
-            function add_Maintext() {
-                length++;
-                var intxt = $("<li></li>").html("<input id='" + length + "'type='text' style='width:500px; height:200px;'/>");
-                $("#endMain").before(intxt);
+            function add_stemtxt() {
+                steml++;
+                var inhtml = $("<li></li>").html("<textarea id='" + "txtstem" + steml + "' style='width:500px; height:200px;'></textarea>");
+                $("#endstem").before(inhtml);
             }
 
-            function add_Mainimage() {
-                length++;
-                var intxt = $("<li></li>").html("<input id='" + length + "'type='file'/>");
-                $("#endMain").before(intxt);
+            function add_stemimg() {
+                steml++;
+                var inhtml = $("<li></li>").html("<input id='" + "imgstem" + steml + "'type='file'/>");
+                $("#endstem").before(inhtml);
             }
 
-            function add_Mainsolution_text() {
-
+            function add_Mainsolution_txt() {
+                mains++;
+                var inhtml = $("<li></li>").html("<textarea id='" + "txtsolu" + mains + "' style='width:500px; height:200px;'></textarea>");
+                $("#endsolu").before(inhtml);
             }
 
-            function add_subquestion() {
-
+            function add_Mainsolution_img() {
+                mains++;
+                var inhtml = $("<li></li>").html("<input id='" + "imgsolu" + mains + "'type='file'/>");
+                $("#endsolu").before(inhtml);
             }
 
+            function add_chioce() {
+                chioce++;
+                var inhtml = $("<li></li>").attr({"id": "chioce" + chioce});
+                inhtml.html(
+                    "<ul>" +
+                    "<li id=\"endchioce" + chioce + "\"><span onclick=\"add_chiocetxt(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加文本选项   </span></li>" +
+                    "            <li><span onclick=\"add_chioceimg(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加图片选项   </span></li>" +
+                    "<li><span onclick=\"delete_chioce(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">删除选项   </span></li>" +
+                    "</ul>");
+                $("#chioce_list").append(inhtml);
+            }
+
+            function delete_chioce(num) {
+                $("#chioce" + num).remove();
+            }
+
+            function add_chiocetxt(num) {
+                var inhtml = $("<li></li>").html("<textarea id='" + "txtchioce" + num + "' style='width:500px; height:200px;'></textarea>");
+                var a = $("#endchioce" + num);
+                a.before(inhtml);
+                inhtml = $("<li></li>").html("<input id='" + "chiocecorrect" + num + "'type='checkbox' value=\"True\"/>");
+                a.before(inhtml);
+                a.next().remove();
+                a.remove()
+            }
+
+            function add_chioceimg(num) {
+                var inhtml = $("<li></li>").html("<input id='" + "imgchioce" + num + "'type='file'/>");
+                var a = $("#endchioce" + num);
+                a.before(inhtml);
+                inhtml = $("<li></li>").html("<input id='" + "chiocecorrect" + num + "'type='checkbox' value=\"True\"/>");
+                a.before(inhtml);
+                a.next().remove();
+                a.remove()
+            }
             function uploadnew() {
 
             }
@@ -80,16 +121,23 @@
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #dca7a7">
         <input type="button" value="提交JQ" onclick="Uploadnew()"/>
-        <ul id="Main" style="list-style-type:none">
-            <li id="endMain"><span onclick="add_Maintext()" class="glyphicon glyphicon-plus">添加文本题干   </span></li>
-            <li><span onclick="add_Mainimage()" class="glyphicon glyphicon-plus">添加图片题干   </span></li>
-            <li><span onclick="add_Mainsolution()" class="glyphicon glyphicon-plus">添加文字解答   </span></li>
-            <li><span onclick="add_Mainimage()" class="glyphicon glyphicon-plus">添加图片解答   </span></li>
+        <ul id="stem">
+            <li><input type="hidden" value="dfb"></li>
+            <li id="endstem"><span onclick="add_stemtxt()" class="glyphicon glyphicon-plus">添加文本题干   </span></li>
+            <li><span onclick="add_stemimg()" class="glyphicon glyphicon-plus">添加图片题干   </span></li>
+            <li id="endsolu"><span onclick="add_Mainsolution_txt()" class="glyphicon glyphicon-plus">添加文字解答   </span>
+            </li>
+            <li><span onclick="add_Mainsolution_img()" class="glyphicon glyphicon-plus">添加图片解答   </span></li>
         </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #4cae4c">
-        <ul id="sub" style="list-style-type: inherit">
-            <li><span onclick="add_subquestion()" class="glyphicon glyphicon-plus">添加小问   </span></li>
+        <ul id="sub">
+            <li>
+                <ol id="chioce_list" style="list-style-type: lower-roman">
+
+                </ol>
+            </li>
+            <li><span onclick="add_chioce()" class="glyphicon glyphicon-plus">添加选项   </span></li>
         </ul>
     </div>
 
