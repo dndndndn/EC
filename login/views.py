@@ -234,8 +234,14 @@ def admin_question_groups(request):
 
 def admin_question_upload(request):
     user = models.User.objects.all()
-    # redirect to all
-    return render(request, 'login/admin_question_upload.html', locals())
+    if request.method == 'GET':
+        user = models.User.objects.all()
+        return render(request, 'login/admin_question_upload.html', locals())
+    elif request.method == 'POST':
+        # obj = request.FILES.get('target')
+        print(request.POST, request.FILES)
+        response = HttpResponse(json.dumps('shangch'))
+    return response
 
 
 def admin_question_search(request):
