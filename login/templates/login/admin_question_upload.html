@@ -84,9 +84,9 @@
             mains++;
             var inhtml = $("<li></li>").html(
                 "<input id='" + "imgsolu" + mains +
-                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/>" +
                 "<img id=\"preimgsolu" + mains + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">" +
-                "<span onclick=\"delete_stem(\'" + "imgsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+                "<span onclick=\"delete_stem(\'" + "imgsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>>"
             );
             $("#endsolu").before(inhtml);
         }
@@ -147,6 +147,7 @@
 
         function Upload_form() {
             var dic = new FormData();
+            var flag = 0;
             dic.append('target', 'formupload');
             var a = $("#stem").children("li");
             var stem_length = a.length - 3;
@@ -161,12 +162,32 @@
             for (var i = 1; i <= stem_length; i++) {
                 b = a.get(i).firstChild;
                 console.log(b.id, b.value);
+                c = $(b).parent().children().last();
                 if (b.tagName === "TEXTAREA") {
-                    dic.append("txtstem" + i, b.value);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        var inhtml = $("<p></p>").html("请添加内容");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtstem" + i, b.value);
+                    }
+
                 }
                 else if (b.tagName === "INPUT") {
-                    dic.append("imgstem" + i, "imgstem" + i);
-                    dic.append("imgstem" + i, b.files[0]);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgstem" + i, "imgstem" + i);
+                        dic.append("imgstem" + i, b.files[0]);
+                    }
                 }
             }
             a = $("#solu").children("li");
@@ -175,12 +196,32 @@
             for (i = 0; i < solu_length; i++) {
                 b = a.get(i).firstChild;
                 console.log(b.id, b.value);
+                c = $(b).parent().children().last();
                 if (b.tagName === "TEXTAREA") {
-                    dic.append("txtsolu" + i + 1, b.value);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtsolu" + i, b.value);
+                    }
+
                 }
                 else if (b.tagName === "INPUT") {
-                    dic.append("imgsolu" + i, "imgsolu" + i);
-                    dic.append("imgsolu" + i + 1, b.files[0]);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgsolu" + i, "imgsolu" + i);
+                        dic.append("imgsolu" + i, b.files[0]);
+                    }
                 }
             }
             a = $("#chioce_list").children("li");
