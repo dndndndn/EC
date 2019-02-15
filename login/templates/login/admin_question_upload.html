@@ -13,6 +13,10 @@
             width: 200px;
             height: 200px;
         }
+
+        textarea {
+            resize: none;
+        }
     </style>
 {% endblock %}
 {% block sub_js %}
@@ -49,7 +53,7 @@
     <script>
         var steml = 0;
         var mains = 0;
-        var chioce = 0;
+        var choice = 0;
 
         function add_stemtxt() {
             steml++;
@@ -91,20 +95,29 @@
             $("#endsolu").before(inhtml);
         }
 
-        function add_chioce() {
-            chioce++;
-            var inhtml = $("<li></li>").attr({"id": "chioce" + chioce, "class": "chioce"});
+        function add_choice() {
+            choice++;
+            var inhtml = $("<li></li>").attr({"id": "choice" + choice, "class": "choice"});
             inhtml.html(
                 "<ul>" +
-                "<li id=\"endchioce" + chioce + "\"><span onclick=\"add_chiocetxt(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加文本选项   </span></li>" +
-                "            <li><span onclick=\"add_chioceimg(" + chioce + ")\" class=\"glyphicon glyphicon-plus\">添加图片选项   </span></li>" +
-                "<li><span onclick=\"delete_chioce(" + chioce + ")\" class=\"glyphicon glyphicon-remove\">删除选项   </span></li>" +
+                "<li id=\"endchoice" + choice + "\"><span onclick=\"add_choicetxt(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加文本选项   </span></li>" +
+                "            <li><span onclick=\"add_choiceimg(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加图片选项   </span></li>" +
+                "<li><span onclick=\"delete_choice(" + choice + ")\" class=\"glyphicon glyphicon-remove\">删除选项   </span></li>" +
                 "</ul>");
-            $("#chioce_list").append(inhtml);
+            $("#choice").append(inhtml);
+            inhtml = $("<li></li>").attr({"id": "choice_tips" + choice, "class": "choice_tips"});
+            inhtml.html(
+                "<ul>" +
+                "<li id=\"endchoice_tips" + choice + "\"><span onclick=\"add_choice_tips_txt(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加文本提示   </span></li>" +
+                "            <li><span onclick=\"add_choice_tips_img(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加图片提示   </span></li>" +
+                "</br>" +
+                "</ul>");
+            $("#choice_tips").append(inhtml);
         }
 
-        function delete_chioce(num) {
-            $("#chioce" + num).remove();
+        function delete_choice(num) {
+            $("#choice" + num).remove();
+            $("#choice_tips" + num).remove();
         }
 
         function delete_stem(id) {
@@ -113,25 +126,45 @@
         }
 
 
-        function add_chiocetxt(num) {
-            var inhtml = $("<li></li>").html("<textarea id='" + "txtchioce" + num + "' style='width:500px; height:200px;'></textarea>");
-            var a = $("#endchioce" + num);
+        function add_choicetxt(num) {
+            var inhtml = $("<li></li>").html("<textarea id='" + "txtchoice" + num + "' style='width:300px; height:100px;'></textarea>");
+            var a = $("#endchoice" + num);
             a.before(inhtml);
-            inhtml = $("<li></li>").html("<input id='" + "chiocecorrect" + num + "'type='checkbox' value=\"True\"/>");
+            inhtml = $("<li></li>").html("<input id='" + "choicecorrect" + num + "'type='checkbox' value=\"True\"/>");
             a.before(inhtml);
             a.next().remove();
             a.remove()
         }
 
-        function add_chioceimg(num) {
+        function add_choiceimg(num) {
             var inhtml = $("<li></li>").html(
-                "<input id='" + "imgchioce" + num +
+                "<input id='" + "imgchoice" + num +
                 "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
-                "<img id=\"preimgchioce" + num + "\" src=\" {% static 'img/plus.jpg' %}\">"
+                "<img id=\"preimgchoice" + num + "\" src=\" {% static 'img/plus.jpg' %}\">"
             );
-            var a = $("#endchioce" + num);
+            var a = $("#endchoice" + num);
             a.before(inhtml);
-            inhtml = $("<li></li>").html("<input id='" + "chiocecorrect" + num + "'type='checkbox' value=\"True\"/>");
+            inhtml = $("<li></li>").html("<input id='" + "choicecorrect" + num + "'type='checkbox' value=\"True\"/>");
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function add_choice_tips_txt(num) {
+            var inhtml = $("<li></li>").html("<textarea id='" + "txtchoice_tips" + num + "' style='width:300px; height:100px;'></textarea>" + "</br></br>");
+            var a = $("#endchoice_tips" + num);
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function add_choice_tips_img(num) {
+            var inhtml = $("<li></li>").html(
+                "<input id='" + "imgchoice_tips" + num +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                "<img id=\"preimgchoice_tips" + num + "\" src=\" {% static 'img/plus.jpg' %}\">" + "</br></br>"
+            );
+            var a = $("#endchoice_tips" + num);
             a.before(inhtml);
             a.next().remove();
             a.remove()
@@ -163,9 +196,12 @@
                 b = a.get(i).firstChild;
                 console.log(b.id, b.value);
                 c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
                 if (b.tagName === "TEXTAREA") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
-                        var inhtml = $("<p></p>").html("请添加内容");
+                        var inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
                     }
@@ -178,7 +214,7 @@
                 }
                 else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
-                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
                     }
@@ -197,66 +233,136 @@
                 b = a.get(i).firstChild;
                 console.log(b.id, b.value);
                 c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
                 if (b.tagName === "TEXTAREA") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
-                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
                     }
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("txtsolu" + i, b.value);
+                        dic.append("txtsolu" + (i + 1), b.value);
                     }
 
                 }
                 else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
-                        inhtml = $("<p></p>").html("请添加内容");
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
                     }
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("imgsolu" + i, "imgsolu" + i);
-                        dic.append("imgsolu" + i, b.files[0]);
+                        dic.append("imgsolu" + (i + 1), "imgsolu" + (i + 1));
+                        dic.append("imgsolu" + (i + 1), b.files[0]);
                     }
                 }
             }
-            a = $("#chioce_list").children("li");
-            console.log(a);
-            console.log(a.length);
-            var chioce_length = a.length;
-            dic.append('chioce_length', chioce_length);
-            for (i = 0; i < chioce_length; i++) {
-                if (!(a.get(i).firstChild.firstChild.id.search(/endchioce/i) === -1)) {
-                    alert("no content");
+            a = $("#choice").children("li");
+            var a_tips = $("#choice_tips").children("li");
+            var choice_length = a.length;
+            dic.append('choice_length', choice_length);
+            for (i = 0; i < choice_length; i++) {
+                b = a.get(i).firstChild.firstChild;
+                if (!(b.id.search(/endchoice/i) === -1)) {
+                    if (!($("#" + b.id + "alert").length > 0)) {
+                        inhtml = $("<b></b>").html("未描述选项");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b.firstChild).append(inhtml);
+                    }
                     continue;
                 }
-                b = a.get(i).firstChild.firstChild.firstChild;
-                console.log(b.id, b.value);
+                b = b.firstChild;
+                c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
                 if (b.tagName === "TEXTAREA") {
-                    dic.append("txtchioce" + i + 1, b.value);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtchoice" + (i + 1), b.value);
+                    }
+
                 }
                 else if (b.tagName === "INPUT") {
-                    dic.append("imgchioce" + i, "imgchioce" + i);
-                    dic.append("imgchioce" + i + 1, b.files[0]);
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgchoice" + (i + 1), "imgchoice" + (i + 1));
+                        dic.append("imgchoice" + (i + 1), b.files[0]);
+                    }
                 }
             }
+            for (i = 0; i < choice_length; i++) {
+                b = a_tips.get(i).firstChild.firstChild;
+                console.log(b.id);
+                if (!(b.id.search(/endchoice_tips/i) === -1)) {
+                    dic.append("choice_tips" + (i + 1), "");
+                    continue;
+                }
+                b = b.firstChild;
+                var c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
+                if (b.tagName === "TEXTAREA") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtchoice_tips" + (i + 1), b.value);
+                    }
 
-            meesage = $.ajax({
-                url: '{% url 'question_upload' %}',
-                type: 'POST',
-                data: dic,
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,  // tell jQuery not to set contentType
-                dataType: 'JSON',
-                success: succFunction,
-            });
-
+                }
+                else if (b.tagName === "INPUT") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgchoice_tips" + (i + 1), "imgchoice_tips" + (i + 1));
+                        dic.append("imgchoice_tips" + (i + 1), b.files[0]);
+                    }
+                }
+            }
+            if (flag === 0)
+                $.ajax({
+                    url: '{% url 'question_upload' %}',
+                    type: 'POST',
+                    data: dic,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    dataType: 'JSON',
+                    success: succFunction,
+                });
+            else if (flag === 1) {
+                alert("提交失败");
+            }
             function succFunction(tt) {
-                alert(tt);
+                alert("提交成功");
             }
         }
     </script>
@@ -281,15 +387,22 @@
             <li><span onclick="add_Mainsolution_img()" class="glyphicon glyphicon-plus">添加图片解答   </span></li>
         </ul>
     </div>
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #4cae4c">
-        <ul id="chioce">
-            <li>
-                <ol id="chioce_list" style="list-style-type: lower-roman">
+    <div id="choice_list" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+         style="background-color: #4cae4c">
+        <div class="row">
+            <div class="col-sm-3  col-md-5  " style="background-color: #5bc0de">
+                <ol id="choice">
 
                 </ol>
-            </li>
-            <li><span onclick="add_chioce()" class="glyphicon glyphicon-plus">添加选项   </span></li>
-        </ul>
+            </div>
+            <div class="col-sm-3 col-md-5 " style="background-color: #dca7a7">
+                <ol id="choice_tips">
+
+                </ol>
+            </div>
+        </div>
+        <span onclick="add_choice()" class="glyphicon glyphicon-plus">添加选项   </span>
+
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #4cae4c">
         <input type="button" value="提交JQ" onclick="Upload_form()" style="margin-left: 200px">
