@@ -20,15 +20,26 @@ class Quesion(models.Model):
         (3, "填空"),
     )
     ID = models.AutoField(primary_key=True)
-    Q_Status = models.SmallIntegerField(choices=question_status, verbose_name="状态")
-    text = models.TextField(null=True, blank=True, verbose_name="题目内容")
+    Q_Status = models.SmallIntegerField(choices=question_status, verbose_name="状态", default=2)
+    text = models.CharField(max_length=15, null=True, blank=True, verbose_name="题目标题", default="")
     choice_type = models.SmallIntegerField(choices=choice_type, verbose_name="选项类型")
+    choice_length = models.SmallIntegerField(verbose_name="选项长度")
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="quesion_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')
+    stem = models.OneToOneField('content', related_name="question_stem", on_delete=models.CASCADE, null=True,
+                                blank=True)
+    solution = models.OneToOneField('content', related_name="question_solution", on_delete=models.CASCADE, null=True,
+                                    blank=True)
     AC = models.PositiveIntegerField(verbose_name="全对人数")
-    general_priority = models.FloatField(verbose_name="优先度")
+    priority = (
+        (0, "关键"),
+        (1, "重要"),
+        (2, "一般"),
+        (3, "用处较小"),
+    )
+    general_priority = models.SmallIntegerField(choices=priority, verbose_name="优先度")
     group = models.ManyToManyField('Group', blank=True, verbose_name="分组")
     ans = models.OneToOneField('Answer', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
@@ -40,6 +51,18 @@ class Quesion(models.Model):
         ordering = ["-c_time"]
         verbose_name = "题目"
         verbose_name_plural = "题目"
+
+
+class content(models.Model):
+    stem_type = (
+        ("txt", "text"),
+        ("img", "image")
+    )
+    type = models.CharField(max_length=15, choices=stem_type, verbose_name="题干类型")
+    img = models.FileField(upload_to="img/%Y/%m/%d", blank=True)
+    text = models.TextField(blank=True)
+    next_content = models.OneToOneField('content', related_name="prev_content", on_delete=models.CASCADE, null=True,
+                                        blank=True)
 
 
 class Chioce(models.Model):
@@ -97,7 +120,7 @@ class Chioce_tips(models.Model):
     related_question = models.ForeignKey(Chioce, null=True, blank=True, related_name='t_question', verbose_name='所属选项',
                                          on_delete=models.CASCADE)
     text = models.TextField(blank=True, verbose_name="文字")
-    #img = models.FilePathField(null=True, verbose_name="图片")
+    # img = models.FilePathField(null=True, verbose_name="图片")
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="tips_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
@@ -198,4 +221,3 @@ class Group(models.Model):
     class Meta:
         verbose_name = '标签'
         verbose_name_plural = "标签"
-

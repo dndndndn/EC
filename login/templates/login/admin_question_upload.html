@@ -226,6 +226,9 @@
                     }
                 }
             }
+
+
+            //solution
             a = $("#solu").children("li");
             var solu_length = a.length - 2;
             dic.append('solu_length', solu_length);
@@ -263,8 +266,9 @@
                     }
                 }
             }
+
+            //choice
             a = $("#choice").children("li");
-            var a_tips = $("#choice_tips").children("li");
             var choice_length = a.length;
             dic.append('choice_length', choice_length);
             for (i = 0; i < choice_length; i++) {
@@ -277,6 +281,7 @@
                     }
                     continue;
                 }
+                dic.append("chioce" + (i + 1), $(b).next().children().last().prop("checked"));
                 b = b.firstChild;
                 c = $(b).parent().children().last();
                 if (b.value === "") {
@@ -309,6 +314,9 @@
                     }
                 }
             }
+
+            //tips
+            var a_tips = $("#choice_tips").children("li");
             for (i = 0; i < choice_length; i++) {
                 b = a_tips.get(i).firstChild.firstChild;
                 console.log(b.id);
@@ -361,6 +369,7 @@
             else if (flag === 1) {
                 alert("提交失败");
             }
+
             function succFunction(tt) {
                 alert("提交成功");
             }
