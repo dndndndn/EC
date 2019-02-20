@@ -6,7 +6,7 @@ from django.db import models
 from login.models import User
 
 
-class Quesion(models.Model):
+class Question(models.Model):
     question_status = (
         (0, '在线'),
         (1, '下线'),
@@ -72,7 +72,8 @@ class Chioce(models.Model):
         (2, '数字'),
     )
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey(Quesion, null=True, blank=True, related_name='c_question', verbose_name='所属问题',
+    related_question = models.ForeignKey('Question', null=True, blank=True, related_name='c_question',
+                                         verbose_name='所属问题',
                                          on_delete=models.CASCADE)
     Bool = models.BooleanField(default=True, verbose_name="正确标志")
     type = models.IntegerField(choices=tp, verbose_name="类型")
@@ -95,7 +96,8 @@ class Chioce(models.Model):
 
 class Answer(models.Model):
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey(Quesion, null=True, blank=True, related_name='a_question', verbose_name='所属问题',
+    related_question = models.ForeignKey('Question', null=True, blank=True, related_name='a_question',
+                                         verbose_name='所属问题',
                                          on_delete=models.CASCADE)
     text = models.TextField(blank=True, verbose_name="文字")
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name='ans_creater',
@@ -138,7 +140,7 @@ class Chioce_tips(models.Model):
 
 class Record(models.Model):
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.OneToOneField(Quesion, null=True, blank=True, related_name='r_question',
+    related_question = models.OneToOneField('Question', null=True, blank=True, related_name='r_question',
                                             verbose_name='所属问题', on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, blank=True, verbose_name='用户', related_name="r_user",
                              on_delete=models.CASCADE)
@@ -188,7 +190,7 @@ class EventLog(models.Model):
         (6, '用户管理添加\删除'),
         (7, '用户管理更新'),
     )
-    quesion = models.ForeignKey('Quesion', blank=True, null=True, on_delete=models.SET_NULL)  # 当编辑问题时有这项数据
+    quesion = models.ForeignKey('Question', blank=True, null=True, on_delete=models.SET_NULL)  # 当编辑问题时有这项数据
     target_user = models.ForeignKey(User, blank=True, null=True, verbose_name="目标用户", related_name='target_user',
                                     on_delete=models.SET_NULL)  # 当用户管理时有这项数据
     record = models.ForeignKey('Record', blank=True, null=True, on_delete=models.SET_NULL)  # 当讨论管理时有这项数据

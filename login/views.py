@@ -3,7 +3,8 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.http import FileResponse, StreamingHttpResponse, JsonResponse
 from . import forms
-from . import models
+from . import models as login_models
+from android import models as android_models
 import hashlib
 import os
 import json
@@ -15,7 +16,7 @@ from django.core.paginator import Paginator
 # code:utf-8
 
 def index(request):
-    user = models.User.objects.get(name=request.session['username'])
+    user = login_models.User.objects.get(name=request.session['username'])
     if user.auth == 'admin' or user.auth == 'superadmin':
         admin = True
     return render(request, 'login/index.html', locals())
@@ -39,7 +40,7 @@ def login(request):
             username = login_form.cleaned_data['username']
             password = login_form.cleaned_data['password']
             try:
-                user = models.User.objects.get(name=username)
+                user = login_models.User.objects.get(name=username)
                 if user.password == hash_code(password):
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
@@ -70,18 +71,18 @@ def register(request):
                 message = "两次输入密码不同"
                 return render(request, 'login/register.html', locals())
             else:
-                same_name_user = models.User.objects.filter(name=username)
+                same_name_user = login_models.User.objects.filter(name=username)
                 if same_name_user:
                     massage = "用户已经存在，请重新选择用户名"
                     return render(request, 'login/register.html', locals())
-                same_email_user = models.User.objects.filter(email=email)
+                same_email_user = login_models.User.objects.filter(email=email)
                 if same_email_user:
                     message = "该邮箱地址已被注册，请使用别的邮箱"
                     return render(request, 'login/register.html', locals())
 
                 # everything ok,then creat new account
 
-                new_user = models.User()
+                new_user = login_models.User()
                 new_user.name = username
                 new_user.password = hash_code(password1)
                 new_user.student_id = student_id
@@ -122,7 +123,7 @@ def admin_account(request):
 
 def admin_account_all(request, tag, page):
     if request.method == 'GET':
-        user_list = models.User.objects.all()
+        user_list = login_models.User.objects.all()
         paginator = Paginator(user_list, 25)  # Show 25 contacts per page
         user = paginator.get_page(page)
         return render(request, 'login/admin_account_all.html', locals())
@@ -130,7 +131,7 @@ def admin_account_all(request, tag, page):
         a = bytes.decode(request.body)
         b = a.split(',')
         for r in b:
-            user = models.User.objects.get(student_id=r)
+            user = login_models.User.objects.get(student_id=r)
             print(user.name)
             user.delete()
         return JsonResponse(json.dumps({"success": "y"}), safe=False)
@@ -138,10 +139,10 @@ def admin_account_all(request, tag, page):
 
 def admin_account_update(request, num):
     if request.method == 'GET':
-        user = models.User.objects.get(student_id=num)
+        user = login_models.User.objects.get(student_id=num)
         return render(request, 'login/admin_account_update.html', locals())
     elif request.method == 'POST':
-        user = models.User.objects.get(student_id=num)
+        user = login_models.User.objects.get(student_id=num)
         data = json.loads(request.body)
         print(data)
         user.student_id = data['student_id']
@@ -161,13 +162,13 @@ def admin_account_update(request, num):
 
 
 def admin_account_groups(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_account_all.html', locals())
 
 
 def admin_account_upload(request):
     if request.method == 'GET':
-        user = models.User.objects.all()
+        user = login_models.User.objects.all()
         return render(request, 'login/admin_account_upload.html', locals())
     elif request.method == 'POST':
         obj = request.FILES.get('fafafa')
@@ -180,7 +181,7 @@ def admin_account_upload(request):
         wb = load_workbook(r"G:\server\EC\store\upload\用户.xlsx")
         sheet = wb.get_sheet_by_name("Sheet1")
         for row in range(2, sheet.max_row + 1):
-            q = models.User(
+            q = login_models.User(
                 student_id=sheet['A' + str(row)].value,
                 name=sheet['B' + str(row)].value,
                 password=sheet['G' + str(row)].value,
@@ -218,34 +219,36 @@ def admin_question(request):
 
 
 def admin_question_all(request, tag, page):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_question_all.html', locals())
 
 
 def admin_question_update(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_question_all.html', locals())
 
 
 def admin_question_groups(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_question_all.html', locals())
 
 
 def admin_question_upload(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     if request.method == 'GET':
-        user = models.User.objects.all()
+        user = login_models.User.objects.all()
         return render(request, 'login/admin_question_upload.html', locals())
     elif request.method == 'POST':
-        # obj = request.FILES.get('target')
         print(request.POST, request.FILES)
-        response = HttpResponse(json.dumps('shangch'))
+        if request.POST.get('target') == "fileupload":
+            response = HttpResponse(json.dumps('文件提交成功'))
+        if request.POST.get('target') == "formupload":
+            response = HttpResponse(json.dumps('表单提交成功'))
     return response
 
 
 def admin_question_search(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     # redirect to all
     return render(request, 'login/admin_question_all.html', locals())
 
@@ -271,27 +274,27 @@ def question_download(request):
 
 
 def admin_test(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_test.html', locals())
 
 
 def admin_forum(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_forum.html', locals())
 
 
 def admin_syllabus(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_syllabus.html', locals())
 
 
 def admin_homework(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_homework.html', locals())
 
 
 def admin_feedback(request):
-    user = models.User.objects.all()
+    user = login_models.User.objects.all()
     return render(request, 'login/admin_feedback.html', locals())
 
 
@@ -300,7 +303,7 @@ def user_filter(request):
 
 
 def user_detail(request, id, name):
-    a = models.User.objects.get(student_id=id)
+    a = login_models.User.objects.get(student_id=id)
     return render(request, "login/user_detail.html", locals())
 
 
