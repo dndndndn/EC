@@ -24,13 +24,13 @@ class Question(models.Model):
     text = models.CharField(max_length=15, null=True, blank=True, verbose_name="题目标题", default="")
     choice_type = models.SmallIntegerField(choices=choice_type, verbose_name="选项类型")
     choice_length = models.SmallIntegerField(verbose_name="选项长度")
-    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="quesion_creater",
+    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="question_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')
-    stem = models.OneToOneField('Content', related_name="question_stem", on_delete=models.CASCADE, null=True,
+    stem = models.OneToOneField('Stem', related_name="question_stem", on_delete=models.CASCADE, null=True,
                                 blank=True)
-    solution = models.OneToOneField('Content', related_name="question_solution", on_delete=models.CASCADE, null=True,
+    solution = models.OneToOneField('Solution', related_name="question_solution", on_delete=models.CASCADE, null=True,
                                     blank=True)
     AC = models.PositiveIntegerField(verbose_name="全对人数", default=0)
     priority = (
@@ -52,32 +52,59 @@ class Question(models.Model):
         verbose_name_plural = "题目"
 
 
-class Content(models.Model):
+def upload_stem(this, filename):
+    return 'question/%s/Stem/%s' % (this.question.ID, filename)
+
+
+class Stem(models.Model):
     stem_type = (
         ("txt", "text"),
         ("img", "image")
     )
     type = models.CharField(max_length=15, choices=stem_type, verbose_name="题干类型")
-    img = models.FileField(upload_to="img/%Y/%m/%d", blank=True)
+    question = models.ForeignKey(Question, null=True, blank=True, verbose_name='创建人', related_name='st_qu',
+                                 on_delete=models.CASCADE)
+    img = models.FileField(upload_to=upload_stem, blank=True)
     text = models.TextField(blank=True)
-    next_content = models.OneToOneField('Content', related_name="prev_content", on_delete=models.CASCADE, null=True,
+    next_content = models.OneToOneField('Stem', on_delete=models.CASCADE, null=True,
                                         blank=True)
+
+
+def upload_solution(this, filename):
+    return 'question/%s/Solution/%s' % (this.question.ID, filename)
+
+
+class Solution(models.Model):
+    stem_type = (
+        ("txt", "text"),
+        ("img", "image")
+    )
+    type = models.CharField(max_length=15, choices=stem_type, verbose_name="题干类型")
+    question = models.ForeignKey(Question, null=True, blank=True, verbose_name='创建人', related_name='so_qu',
+                                 on_delete=models.CASCADE)
+    img = models.FileField(upload_to=upload_solution, blank=True)
+    text = models.TextField(blank=True)
+    next_content = models.OneToOneField('Solution', on_delete=models.CASCADE, null=True,
+                                        blank=True)
+
+
+def upload_chioce(this):
+    return 'question/%s/Choice/%s' % (this.question.ID, this.ID)
 
 
 class Choice(models.Model):
     tp = (
-        (0, '图片'),
-        (1, '文字'),
-        (2, '数字'),
+        ("txt", "text"),
+        ("img", "image")
     )
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey('Question', null=True, blank=True, related_name='c_question',
+    related_question = models.ForeignKey(Question, null=True, blank=True, related_name='choice',
                                          verbose_name='所属问题',
                                          on_delete=models.CASCADE)
     Bool = models.BooleanField(default=True, verbose_name="正确标志")
-    type = models.IntegerField(choices=tp, verbose_name="类型")
+    type = models.CharField(choices=tp, verbose_name="类型", max_length=10)
     text = models.TextField(blank=True, verbose_name="文字")
-    number = models.IntegerField(blank=True, verbose_name="数字")
+    img = models.FileField(upload_to=upload_chioce, blank=True)
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="choice_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
@@ -93,36 +120,20 @@ class Choice(models.Model):
         verbose_name_plural = "选项"
 
 
-class Answer(models.Model):
+class ChoiceTips(models.Model):
+    tp = (
+        ("txt", "text"),
+        ("img", "image")
+    )
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey('Question', null=True, blank=True, related_name='a_question',
+    related_question = models.ForeignKey(Question, null=True, blank=True, related_name='choiceTips',
                                          verbose_name='所属问题',
                                          on_delete=models.CASCADE)
+    Bool = models.BooleanField(default=True, verbose_name="正确标志")
+    type = models.CharField(choices=tp, verbose_name="类型", max_length=10)
     text = models.TextField(blank=True, verbose_name="文字")
-    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name='ans_creater',
-                                  on_delete=models.SET_NULL)
-    c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
-    modify_by = models.ForeignKey(User, null=True, blank=True, verbose_name='编辑人', related_name='ans_modifier',
-                                  on_delete=models.SET_NULL)
-    m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')
-    tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
-
-    def __str__(self):
-        return self.ID
-
-    class Meta:
-        ordering = ["-ID"]
-        verbose_name = "选项"
-        verbose_name_plural = "选项"
-
-
-class ChoiceTips(models.Model):
-    ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey(Choice, null=True, blank=True, related_name='t_question', verbose_name='所属选项',
-                                         on_delete=models.CASCADE)
-    text = models.TextField(blank=True, verbose_name="文字")
-    # img = models.FilePathField(null=True, verbose_name="图片")
-    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="tips_creater",
+    img = models.FileField(upload_to=upload_chioce, blank=True)
+    create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="choiceTips_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')

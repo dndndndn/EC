@@ -249,15 +249,24 @@ def admin_question_upload(request):
             question.text = ""
             question.choice_length = request.POST.get("choice_length")
             question.general_priority = 2
+            choicetype = 0
+            for i in range(0, int(request.POST.get('stem_length'))):
+                if request.POST.get("choice" + str(i)) == "true":
+                    choicetype += 1
+            if choicetype > 1:
+                question.choice_type = 1
+            else:
+                question.choice_type = 0
+            question.save()
 
-            def listinput(length, name):
+            def list_input(length, name, new, question):
                 list = []
                 print(length)
                 if length == 0:
                     return None
                 for i in range(0, length):
 
-                    list.append(android_models.Content())
+                    list.append(new())
                     if request.POST.get("img" + name + str(i)):
                         list[i].type = "img"
                         obj = request.FILES.get('img' + name + str(i))
@@ -271,6 +280,7 @@ def admin_question_upload(request):
                         list[i].type = "txt"
                         obj = request.POST.get("txt" + name + str(i))
                         list[i].text = obj
+                    list[i].question = question
                     list[i].save()
                     if i != 0:
                         list[i - 1].next_content = list[i]
@@ -279,16 +289,9 @@ def admin_question_upload(request):
                 list[len(list) - 1].save()
                 return list[0]
 
-            question.stem = listinput(int(request.POST.get('stem_length')), "stem")
-            question.solution = listinput(int(request.POST.get('solu_length')), "solu")
-            choicetype = 0
-            for i in range(0, int(request.POST.get('stem_length'))):
-                if request.POST.get("choice" + str(i)) == "true":
-                    choicetype += 1
-            if choicetype > 1:
-                question.choice_type = 1
-            else:
-                question.choice_type = 0
+            question.stem = list_input(int(request.POST.get('stem_length')), "stem", android_models.Stem, question)
+            question.solution = list_input(int(request.POST.get('solu_length')), "solu", android_models.Solution,
+                                           question)
             question.save()
     return response
 
