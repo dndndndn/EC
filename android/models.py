@@ -28,11 +28,11 @@ class Question(models.Model):
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')
-    stem = models.OneToOneField('content', related_name="question_stem", on_delete=models.CASCADE, null=True,
+    stem = models.OneToOneField('Content', related_name="question_stem", on_delete=models.CASCADE, null=True,
                                 blank=True)
-    solution = models.OneToOneField('content', related_name="question_solution", on_delete=models.CASCADE, null=True,
+    solution = models.OneToOneField('Content', related_name="question_solution", on_delete=models.CASCADE, null=True,
                                     blank=True)
-    AC = models.PositiveIntegerField(verbose_name="全对人数")
+    AC = models.PositiveIntegerField(verbose_name="全对人数", default=0)
     priority = (
         (0, "关键"),
         (1, "重要"),
@@ -41,7 +41,6 @@ class Question(models.Model):
     )
     general_priority = models.SmallIntegerField(choices=priority, verbose_name="优先度")
     group = models.ManyToManyField('Group', blank=True, verbose_name="分组")
-    ans = models.OneToOneField('Answer', on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
 
     def __str__(self):
@@ -53,7 +52,7 @@ class Question(models.Model):
         verbose_name_plural = "题目"
 
 
-class content(models.Model):
+class Content(models.Model):
     stem_type = (
         ("txt", "text"),
         ("img", "image")
@@ -61,11 +60,11 @@ class content(models.Model):
     type = models.CharField(max_length=15, choices=stem_type, verbose_name="题干类型")
     img = models.FileField(upload_to="img/%Y/%m/%d", blank=True)
     text = models.TextField(blank=True)
-    next_content = models.OneToOneField('content', related_name="prev_content", on_delete=models.CASCADE, null=True,
+    next_content = models.OneToOneField('Content', related_name="prev_content", on_delete=models.CASCADE, null=True,
                                         blank=True)
 
 
-class Chioce(models.Model):
+class Choice(models.Model):
     tp = (
         (0, '图片'),
         (1, '文字'),
@@ -117,9 +116,9 @@ class Answer(models.Model):
         verbose_name_plural = "选项"
 
 
-class Chioce_tips(models.Model):
+class ChoiceTips(models.Model):
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey(Chioce, null=True, blank=True, related_name='t_question', verbose_name='所属选项',
+    related_question = models.ForeignKey(Choice, null=True, blank=True, related_name='t_question', verbose_name='所属选项',
                                          on_delete=models.CASCADE)
     text = models.TextField(blank=True, verbose_name="文字")
     # img = models.FilePathField(null=True, verbose_name="图片")

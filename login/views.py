@@ -244,6 +244,52 @@ def admin_question_upload(request):
             response = HttpResponse(json.dumps('文件提交成功'))
         if request.POST.get('target') == "formupload":
             response = HttpResponse(json.dumps('表单提交成功'))
+            question = android_models.Question()
+            question.Q_Status = 0
+            question.text = ""
+            question.choice_length = request.POST.get("choice_length")
+            question.general_priority = 2
+
+            def listinput(length, name):
+                list = []
+                print(length)
+                if length == 0:
+                    return None
+                for i in range(0, length):
+
+                    list.append(android_models.Content())
+                    if request.POST.get("img" + name + str(i)):
+                        list[i].type = "img"
+                        obj = request.FILES.get('img' + name + str(i))
+                        file_path = os.path.join('store/upload', obj.name)
+                        f = open(file_path, 'wb')
+                        for chunk in obj.chunks():
+                            f.write(chunk)
+                        list[i].img = obj
+                        f.close()
+                    if request.POST.get("txt" + name + str(i)):
+                        list[i].type = "txt"
+                        obj = request.POST.get("txt" + name + str(i))
+                        list[i].text = obj
+                    list[i].save()
+                    if i != 0:
+                        list[i - 1].next_content = list[i]
+                        list[i - 1].save()
+                list[len(list) - 1].next_content = None
+                list[len(list) - 1].save()
+                return list[0]
+
+            question.stem = listinput(int(request.POST.get('stem_length')), "stem")
+            question.solution = listinput(int(request.POST.get('solu_length')), "solu")
+            choicetype = 0
+            for i in range(0, int(request.POST.get('stem_length'))):
+                if request.POST.get("choice" + str(i)) == "true":
+                    choicetype += 1
+            if choicetype > 1:
+                question.choice_type = 1
+            else:
+                question.choice_type = 0
+            question.save()
     return response
 
 

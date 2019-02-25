@@ -174,7 +174,13 @@
             console.log(obj.files[0]);//这里可以获取上传文件的name
             console.log("#pre" + obj.id);
             a = $("#" + obj.id);
-            a.next().attr({"src": URL.createObjectURL(obj.files[0])});
+
+            if (obj.files[0] === undefined)
+                url = "{% static 'img/plus.jpg' %}";
+            else url = URL.createObjectURL(obj.files[0]);
+            a.next().attr({"src": url});
+
+
             console.log(a);
         }
 
@@ -208,7 +214,7 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("txtstem" + i, b.value);
+                        dic.append("txtstem" + (i - 1), b.value);
                     }
 
                 }
@@ -221,8 +227,8 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("imgstem" + i, "imgstem" + i);
-                        dic.append("imgstem" + i, b.files[0]);
+                        dic.append("imgstem" + (i - 1), "imgstem" + (i - 1));
+                        dic.append("imgstem" + (i - 1), b.files[0]);
                     }
                 }
             }
@@ -248,7 +254,7 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("txtsolu" + (i + 1), b.value);
+                        dic.append("txtsolu" + i, b.value);
                     }
 
                 }
@@ -261,8 +267,8 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("imgsolu" + (i + 1), "imgsolu" + (i + 1));
-                        dic.append("imgsolu" + (i + 1), b.files[0]);
+                        dic.append("imgsolu" + i, "imgsolu" + i);
+                        dic.append("imgsolu" + i, b.files[0]);
                     }
                 }
             }
@@ -281,7 +287,7 @@
                     }
                     continue;
                 }
-                dic.append("chioce" + (i + 1), $(b).next().children().last().prop("checked"));
+                dic.append("chioce" + i, $(b).next().children().last().prop("checked"));
                 b = b.firstChild;
                 c = $(b).parent().children().last();
                 if (b.value === "") {
@@ -296,7 +302,7 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("txtchoice" + (i + 1), b.value);
+                        dic.append("txtchoice" + i, b.value);
                     }
 
                 }
@@ -309,8 +315,8 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("imgchoice" + (i + 1), "imgchoice" + (i + 1));
-                        dic.append("imgchoice" + (i + 1), b.files[0]);
+                        dic.append("imgchoice" + i, "imgchoice" + i);
+                        dic.append("imgchoice" + i, b.files[0]);
                     }
                 }
             }
@@ -321,7 +327,7 @@
                 b = a_tips.get(i).firstChild.firstChild;
                 console.log(b.id);
                 if (!(b.id.search(/endchoice_tips/i) === -1)) {
-                    dic.append("choice_tips" + (i + 1), "");
+                    dic.append("choice_tips" + i, "");
                     continue;
                 }
                 b = b.firstChild;
@@ -338,7 +344,7 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("txtchoice_tips" + (i + 1), b.value);
+                        dic.append("txtchoice_tips" + i, b.value);
                     }
 
                 }
@@ -351,8 +357,8 @@
                     else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
-                        dic.append("imgchoice_tips" + (i + 1), "imgchoice_tips" + (i + 1));
-                        dic.append("imgchoice_tips" + (i + 1), b.files[0]);
+                        dic.append("imgchoice_tips" + i, "imgchoice_tips" + i);
+                        dic.append("imgchoice_tips" + i, b.files[0]);
                     }
                 }
             }
