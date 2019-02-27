@@ -1312,5 +1312,1628 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
+    <table id="329" parent="3" name="android_choice"/>
+    <table id="330" parent="3" name="android_choice_tags"/>
+    <table id="331" parent="3" name="android_choicetips"/>
+    <table id="332" parent="3" name="android_choicetips_tags"/>
+    <table id="333" parent="3" name="android_eventlog"/>
+    <table id="334" parent="3" name="android_group"/>
+    <table id="335" parent="3" name="android_question"/>
+    <table id="336" parent="3" name="android_question_group"/>
+    <table id="337" parent="3" name="android_question_tags"/>
+    <table id="338" parent="3" name="android_record"/>
+    <table id="339" parent="3" name="android_record_tags"/>
+    <table id="340" parent="3" name="android_solution"/>
+    <table id="341" parent="3" name="android_stem"/>
+    <table id="342" parent="3" name="android_tag"/>
+    <table id="343" parent="3" name="auth_group"/>
+    <table id="344" parent="3" name="auth_group_permissions"/>
+    <table id="345" parent="3" name="auth_permission"/>
+    <table id="346" parent="3" name="auth_user"/>
+    <table id="347" parent="3" name="auth_user_groups"/>
+    <table id="348" parent="3" name="auth_user_user_permissions"/>
+    <table id="349" parent="3" name="captcha_captchastore"/>
+    <table id="350" parent="3" name="django_admin_log"/>
+    <table id="351" parent="3" name="django_content_type"/>
+    <table id="352" parent="3" name="django_migrations"/>
+    <table id="353" parent="3" name="django_session"/>
+    <table id="354" parent="3" name="login_group"/>
+    <table id="355" parent="3" name="login_membership"/>
+    <table id="356" parent="3" name="login_user"/>
+    <column id="357" parent="329" name="ID">
+      <Position>1</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="358" parent="329" name="Bool">
+      <Position>2</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="359" parent="329" name="type">
+      <Position>3</Position>
+      <DataType>varchar(10)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="360" parent="329" name="text">
+      <Position>4</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="361" parent="329" name="img">
+      <Position>5</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="362" parent="329" name="c_time">
+      <Position>6</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="363" parent="329" name="m_time">
+      <Position>7</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="364" parent="329" name="create_by_id">
+      <Position>8</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="365" parent="329" name="related_question_id">
+      <Position>9</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="366" parent="329" name="android_choice_create_by_id_8802e67a_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="367" parent="329" name="android_choice_related_question_id_4ee71bb7_fk_android_q">
+      <ColNames>related_question_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="368" parent="329" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="369" parent="329" name="android_choice_create_by_id_8802e67a_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="370" parent="329" name="android_choice_related_question_id_4ee71bb7_fk_android_q">
+      <ColNames>related_question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <column id="371" parent="330" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="372" parent="330" name="choice_id">
+      <Position>2</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="373" parent="330" name="tag_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="374" parent="330" name="android_choice_tags_choice_id_tag_id_b5a3707c_uniq">
+      <ColNames>choice_id
+tag_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="375" parent="330" name="android_choice_tags_tag_id_6e70a64a_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="376" parent="330" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="377" parent="330" name="android_choice_tags_choice_id_tag_id_b5a3707c_uniq">
+      <ColNames>choice_id
+tag_id</ColNames>
+      <UnderlyingIndexName>android_choice_tags_choice_id_tag_id_b5a3707c_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="378" parent="330" name="android_choice_tags_choice_id_3f5b627b_fk_android_choice_ID">
+      <ColNames>choice_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_choice</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="379" parent="330" name="android_choice_tags_tag_id_6e70a64a_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_tag</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="380" parent="331" name="ID">
+      <Position>1</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="381" parent="331" name="Bool">
+      <Position>2</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="382" parent="331" name="type">
+      <Position>3</Position>
+      <DataType>varchar(10)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="383" parent="331" name="text">
+      <Position>4</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="384" parent="331" name="img">
+      <Position>5</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="385" parent="331" name="c_time">
+      <Position>6</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="386" parent="331" name="m_time">
+      <Position>7</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="387" parent="331" name="create_by_id">
+      <Position>8</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="388" parent="331" name="related_question_id">
+      <Position>9</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="389" parent="331" name="android_choicetips_create_by_id_b250c7c0_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="390" parent="331" name="android_choicetips_related_question_id_9382b7e9_fk_android_q">
+      <ColNames>related_question_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="391" parent="331" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="392" parent="331" name="android_choicetips_create_by_id_b250c7c0_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="393" parent="331" name="android_choicetips_related_question_id_9382b7e9_fk_android_q">
+      <ColNames>related_question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <column id="394" parent="332" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="395" parent="332" name="choicetips_id">
+      <Position>2</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="396" parent="332" name="tag_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="397" parent="332" name="android_choicetips_tags_choicetips_id_tag_id_91bc8a92_uniq">
+      <ColNames>choicetips_id
+tag_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="398" parent="332" name="android_choicetips_tags_tag_id_c23af54a_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="399" parent="332" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="400" parent="332" name="android_choicetips_tags_choicetips_id_tag_id_91bc8a92_uniq">
+      <ColNames>choicetips_id
+tag_id</ColNames>
+      <UnderlyingIndexName>android_choicetips_tags_choicetips_id_tag_id_91bc8a92_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="401" parent="332" name="android_choicetips_t_choicetips_id_90e05ee3_fk_android_c">
+      <ColNames>choicetips_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_choicetips</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="402" parent="332" name="android_choicetips_tags_tag_id_c23af54a_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_tag</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="403" parent="333" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="404" parent="333" name="name">
+      <Position>2</Position>
+      <DataType>varchar(128)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="405" parent="333" name="event_type">
+      <Position>3</Position>
+      <DataType>smallint(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="406" parent="333" name="component">
+      <Position>4</Position>
+      <DataType>varchar(256)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="407" parent="333" name="detail">
+      <Position>5</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="408" parent="333" name="date">
+      <Position>6</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="409" parent="333" name="memo">
+      <Position>7</Position>
+      <DataType>longtext|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="410" parent="333" name="quesion_id">
+      <Position>8</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="411" parent="333" name="record_id">
+      <Position>9</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="412" parent="333" name="target_user_id">
+      <Position>10</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="413" parent="333" name="user_id">
+      <Position>11</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="414" parent="333" name="android_eventlog_quesion_id_a1648d7b_fk_android_question_ID">
+      <ColNames>quesion_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="415" parent="333" name="android_eventlog_record_id_98d5c6b3_fk_android_record_ID">
+      <ColNames>record_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="416" parent="333" name="android_eventlog_target_user_id_688a147a_fk_login_user_id">
+      <ColNames>target_user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="417" parent="333" name="android_eventlog_user_id_232fa955_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="418" parent="333" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="419" parent="333" name="android_eventlog_quesion_id_a1648d7b_fk_android_question_ID">
+      <ColNames>quesion_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="420" parent="333" name="android_eventlog_record_id_98d5c6b3_fk_android_record_ID">
+      <ColNames>record_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_record</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="421" parent="333" name="android_eventlog_target_user_id_688a147a_fk_login_user_id">
+      <ColNames>target_user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="422" parent="333" name="android_eventlog_user_id_232fa955_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="423" parent="334" name="ID">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="424" parent="334" name="name">
+      <Position>2</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="425" parent="334" name="c_day">
+      <Position>3</Position>
+      <DataType>date|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="426" parent="334" name="create_by_id">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="427" parent="334" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="428" parent="334" name="android_group_create_by_id_c11c4056_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="429" parent="334" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="430" parent="334" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <foreign-key id="431" parent="334" name="android_group_create_by_id_c11c4056_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="432" parent="335" name="ID">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="433" parent="335" name="Q_Status">
+      <Position>2</Position>
+      <DataType>smallint(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="434" parent="335" name="text">
+      <Position>3</Position>
+      <DataType>varchar(15)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="435" parent="335" name="choice_type">
+      <Position>4</Position>
+      <DataType>smallint(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="436" parent="335" name="choice_length">
+      <Position>5</Position>
+      <DataType>smallint(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="437" parent="335" name="c_time">
+      <Position>6</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="438" parent="335" name="m_time">
+      <Position>7</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="439" parent="335" name="AC">
+      <Position>8</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="440" parent="335" name="general_priority">
+      <Position>9</Position>
+      <DataType>smallint(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="441" parent="335" name="create_by_id">
+      <Position>10</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="442" parent="335" name="solution_id">
+      <Position>11</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="443" parent="335" name="stem_id">
+      <Position>12</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="444" parent="335" name="solution_id">
+      <ColNames>solution_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="445" parent="335" name="stem_id">
+      <ColNames>stem_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="446" parent="335" name="android_question_create_by_id_68751f15_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="447" parent="335" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="448" parent="335" name="solution_id">
+      <ColNames>solution_id</ColNames>
+      <UnderlyingIndexName>solution_id</UnderlyingIndexName>
+    </key>
+    <key id="449" parent="335" name="stem_id">
+      <ColNames>stem_id</ColNames>
+      <UnderlyingIndexName>stem_id</UnderlyingIndexName>
+    </key>
+    <foreign-key id="450" parent="335" name="android_question_create_by_id_68751f15_fk_login_user_id">
+      <ColNames>create_by_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="451" parent="335" name="android_question_solution_id_75e12e84_fk_android_solution_id">
+      <ColNames>solution_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_solution</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="452" parent="335" name="android_question_stem_id_3c7589a0_fk_android_stem_id">
+      <ColNames>stem_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_stem</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="453" parent="336" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="454" parent="336" name="question_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="455" parent="336" name="group_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="456" parent="336" name="android_question_group_question_id_group_id_0cac7576_uniq">
+      <ColNames>question_id
+group_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="457" parent="336" name="android_question_group_group_id_7036206b_fk_android_group_ID">
+      <ColNames>group_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="458" parent="336" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="459" parent="336" name="android_question_group_question_id_group_id_0cac7576_uniq">
+      <ColNames>question_id
+group_id</ColNames>
+      <UnderlyingIndexName>android_question_group_question_id_group_id_0cac7576_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="460" parent="336" name="android_question_gro_question_id_05f8a930_fk_android_q">
+      <ColNames>question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="461" parent="336" name="android_question_group_group_id_7036206b_fk_android_group_ID">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_group</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <column id="462" parent="337" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="463" parent="337" name="question_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="464" parent="337" name="tag_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="465" parent="337" name="android_question_tags_question_id_tag_id_64ca159e_uniq">
+      <ColNames>question_id
+tag_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="466" parent="337" name="android_question_tags_tag_id_c2762252_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="467" parent="337" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="468" parent="337" name="android_question_tags_question_id_tag_id_64ca159e_uniq">
+      <ColNames>question_id
+tag_id</ColNames>
+      <UnderlyingIndexName>android_question_tags_question_id_tag_id_64ca159e_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="469" parent="337" name="android_question_tag_question_id_ca73c6d9_fk_android_q">
+      <ColNames>question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="470" parent="337" name="android_question_tags_tag_id_c2762252_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_tag</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="471" parent="338" name="ID">
+      <Position>1</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="472" parent="338" name="begin_time">
+      <Position>2</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="473" parent="338" name="AC">
+      <Position>3</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="474" parent="338" name="end_time">
+      <Position>4</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="475" parent="338" name="duration">
+      <Position>5</Position>
+      <DataType>bigint(20)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="476" parent="338" name="related_question_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="477" parent="338" name="user_id">
+      <Position>7</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="478" parent="338" name="related_question_id">
+      <ColNames>related_question_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="479" parent="338" name="android_record_user_id_8512ce12_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="480" parent="338" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="481" parent="338" name="related_question_id">
+      <ColNames>related_question_id</ColNames>
+      <UnderlyingIndexName>related_question_id</UnderlyingIndexName>
+    </key>
+    <foreign-key id="482" parent="338" name="android_record_related_question_id_2256b8a8_fk_android_q">
+      <ColNames>related_question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="483" parent="338" name="android_record_user_id_8512ce12_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="484" parent="339" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="485" parent="339" name="record_id">
+      <Position>2</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="486" parent="339" name="tag_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="487" parent="339" name="android_record_tags_record_id_tag_id_bc0192be_uniq">
+      <ColNames>record_id
+tag_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="488" parent="339" name="android_record_tags_tag_id_754b6bcf_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="489" parent="339" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="490" parent="339" name="android_record_tags_record_id_tag_id_bc0192be_uniq">
+      <ColNames>record_id
+tag_id</ColNames>
+      <UnderlyingIndexName>android_record_tags_record_id_tag_id_bc0192be_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="491" parent="339" name="android_record_tags_record_id_1147c7a8_fk_android_record_ID">
+      <ColNames>record_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_record</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="492" parent="339" name="android_record_tags_tag_id_754b6bcf_fk_android_tag_id">
+      <ColNames>tag_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_tag</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="493" parent="340" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="494" parent="340" name="type">
+      <Position>2</Position>
+      <DataType>varchar(15)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="495" parent="340" name="img">
+      <Position>3</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="496" parent="340" name="text">
+      <Position>4</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="497" parent="340" name="next_content_id">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="498" parent="340" name="question_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="499" parent="340" name="next_content_id">
+      <ColNames>next_content_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="500" parent="340" name="android_solution_question_id_1bf9a661_fk_android_question_ID">
+      <ColNames>question_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="501" parent="340" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="502" parent="340" name="next_content_id">
+      <ColNames>next_content_id</ColNames>
+      <UnderlyingIndexName>next_content_id</UnderlyingIndexName>
+    </key>
+    <foreign-key id="503" parent="340" name="android_solution_next_content_id_d8aec820_fk_android_solution_id">
+      <ColNames>next_content_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_solution</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="504" parent="340" name="android_solution_question_id_1bf9a661_fk_android_question_ID">
+      <ColNames>question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <column id="505" parent="341" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="506" parent="341" name="type">
+      <Position>2</Position>
+      <DataType>varchar(15)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="507" parent="341" name="img">
+      <Position>3</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="508" parent="341" name="text">
+      <Position>4</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="509" parent="341" name="next_content_id">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="510" parent="341" name="question_id">
+      <Position>6</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="511" parent="341" name="next_content_id">
+      <ColNames>next_content_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="512" parent="341" name="android_stem_question_id_61f0f28a_fk_android_question_ID">
+      <ColNames>question_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="513" parent="341" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="514" parent="341" name="next_content_id">
+      <ColNames>next_content_id</ColNames>
+      <UnderlyingIndexName>next_content_id</UnderlyingIndexName>
+    </key>
+    <foreign-key id="515" parent="341" name="android_stem_next_content_id_79cd7c64_fk_android_stem_id">
+      <ColNames>next_content_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_stem</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="516" parent="341" name="android_stem_question_id_61f0f28a_fk_android_question_ID">
+      <ColNames>question_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>android_question</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <column id="517" parent="342" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="518" parent="342" name="name">
+      <Position>2</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="519" parent="342" name="c_day">
+      <Position>3</Position>
+      <DataType>date|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="520" parent="342" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="521" parent="342" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="522" parent="342" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <column id="523" parent="343" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="524" parent="343" name="name">
+      <Position>2</Position>
+      <DataType>varchar(80)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="525" parent="343" name="name">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="526" parent="343" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="527" parent="343" name="name">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name</UnderlyingIndexName>
+    </key>
+    <column id="528" parent="344" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="529" parent="344" name="group_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="530" parent="344" name="permission_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="531" parent="344" name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq">
+      <ColNames>group_id
+permission_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="532" parent="344" name="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="533" parent="344" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="534" parent="344" name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq">
+      <ColNames>group_id
+permission_id</ColNames>
+      <UnderlyingIndexName>auth_group_permissions_group_id_permission_id_0cd325b0_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="535" parent="344" name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="536" parent="344" name="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_permission</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="537" parent="345" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="538" parent="345" name="name">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="539" parent="345" name="content_type_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="540" parent="345" name="codename">
+      <Position>4</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="541" parent="345" name="auth_permission_content_type_id_codename_01ab375a_uniq">
+      <ColNames>content_type_id
+codename</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="542" parent="345" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="543" parent="345" name="auth_permission_content_type_id_codename_01ab375a_uniq">
+      <ColNames>content_type_id
+codename</ColNames>
+      <UnderlyingIndexName>auth_permission_content_type_id_codename_01ab375a_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="544" parent="345" name="auth_permission_content_type_id_2f476e4b_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>django_content_type</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="545" parent="346" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="546" parent="346" name="password">
+      <Position>2</Position>
+      <DataType>varchar(128)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="547" parent="346" name="last_login">
+      <Position>3</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="548" parent="346" name="is_superuser">
+      <Position>4</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="549" parent="346" name="username">
+      <Position>5</Position>
+      <DataType>varchar(150)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="550" parent="346" name="first_name">
+      <Position>6</Position>
+      <DataType>varchar(30)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="551" parent="346" name="last_name">
+      <Position>7</Position>
+      <DataType>varchar(150)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="552" parent="346" name="email">
+      <Position>8</Position>
+      <DataType>varchar(254)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="553" parent="346" name="is_staff">
+      <Position>9</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="554" parent="346" name="is_active">
+      <Position>10</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="555" parent="346" name="date_joined">
+      <Position>11</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="556" parent="346" name="username">
+      <ColNames>username</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="557" parent="346" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="558" parent="346" name="username">
+      <ColNames>username</ColNames>
+      <UnderlyingIndexName>username</UnderlyingIndexName>
+    </key>
+    <column id="559" parent="347" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="560" parent="347" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="561" parent="347" name="group_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="562" parent="347" name="auth_user_groups_user_id_group_id_94350c0c_uniq">
+      <ColNames>user_id
+group_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="563" parent="347" name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="564" parent="347" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="565" parent="347" name="auth_user_groups_user_id_group_id_94350c0c_uniq">
+      <ColNames>user_id
+group_id</ColNames>
+      <UnderlyingIndexName>auth_user_groups_user_id_group_id_94350c0c_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="566" parent="347" name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="567" parent="347" name="auth_user_groups_group_id_97559544_fk_auth_group_id">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_group</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="568" parent="348" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="569" parent="348" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="570" parent="348" name="permission_id">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="571" parent="348" name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq">
+      <ColNames>user_id
+permission_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="572" parent="348" name="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="573" parent="348" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="574" parent="348" name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq">
+      <ColNames>user_id
+permission_id</ColNames>
+      <UnderlyingIndexName>auth_user_user_permissions_user_id_permission_id_14a6b632_uniq</UnderlyingIndexName>
+    </key>
+    <foreign-key id="575" parent="348" name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="576" parent="348" name="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm">
+      <ColNames>permission_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_permission</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="577" parent="349" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="578" parent="349" name="challenge">
+      <Position>2</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="579" parent="349" name="response">
+      <Position>3</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="580" parent="349" name="hashkey">
+      <Position>4</Position>
+      <DataType>varchar(40)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="581" parent="349" name="expiration">
+      <Position>5</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="582" parent="349" name="hashkey">
+      <ColNames>hashkey</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="583" parent="349" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="584" parent="349" name="hashkey">
+      <ColNames>hashkey</ColNames>
+      <UnderlyingIndexName>hashkey</UnderlyingIndexName>
+    </key>
+    <column id="585" parent="350" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="586" parent="350" name="action_time">
+      <Position>2</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="587" parent="350" name="object_id">
+      <Position>3</Position>
+      <DataType>longtext|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="588" parent="350" name="object_repr">
+      <Position>4</Position>
+      <DataType>varchar(200)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="589" parent="350" name="action_flag">
+      <Position>5</Position>
+      <DataType>smallint(5) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="590" parent="350" name="change_message">
+      <Position>6</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="591" parent="350" name="content_type_id">
+      <Position>7</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="592" parent="350" name="user_id">
+      <Position>8</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="593" parent="350" name="django_admin_log_content_type_id_c4bce8eb_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="594" parent="350" name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="595" parent="350" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="596" parent="350" name="django_admin_log_content_type_id_c4bce8eb_fk_django_co">
+      <ColNames>content_type_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>django_content_type</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="597" parent="350" name="django_admin_log_user_id_c564eba6_fk_auth_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>auth_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="598" parent="351" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="599" parent="351" name="app_label">
+      <Position>2</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="600" parent="351" name="model">
+      <Position>3</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="601" parent="351" name="django_content_type_app_label_model_76bd3d3b_uniq">
+      <ColNames>app_label
+model</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="602" parent="351" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="603" parent="351" name="django_content_type_app_label_model_76bd3d3b_uniq">
+      <ColNames>app_label
+model</ColNames>
+      <UnderlyingIndexName>django_content_type_app_label_model_76bd3d3b_uniq</UnderlyingIndexName>
+    </key>
+    <column id="604" parent="352" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="605" parent="352" name="app">
+      <Position>2</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="606" parent="352" name="name">
+      <Position>3</Position>
+      <DataType>varchar(255)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="607" parent="352" name="applied">
+      <Position>4</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="608" parent="352" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="609" parent="353" name="session_key">
+      <Position>1</Position>
+      <DataType>varchar(40)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="610" parent="353" name="session_data">
+      <Position>2</Position>
+      <DataType>longtext|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="611" parent="353" name="expire_date">
+      <Position>3</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="612" parent="353" name="django_session_expire_date_a5c62663">
+      <ColNames>expire_date</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="613" parent="353" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>session_key</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="614" parent="354" name="ID">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="615" parent="354" name="name">
+      <Position>2</Position>
+      <DataType>varchar(20)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="616" parent="354" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>ID</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="617" parent="355" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="618" parent="355" name="date">
+      <Position>2</Position>
+      <DataType>date|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="619" parent="355" name="invite_reason">
+      <Position>3</Position>
+      <DataType>varchar(64)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="620" parent="355" name="group_id">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="621" parent="355" name="user_id">
+      <Position>5</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="622" parent="355" name="login_membership_group_id_e2bf3992_fk_login_group_ID">
+      <ColNames>group_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <index id="623" parent="355" name="login_membership_user_id_e0b2b0fb_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="624" parent="355" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="625" parent="355" name="login_membership_group_id_e2bf3992_fk_login_group_ID">
+      <ColNames>group_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_group</RefTableName>
+      <RefColNames>ID</RefColNames>
+    </foreign-key>
+    <foreign-key id="626" parent="355" name="login_membership_user_id_e0b2b0fb_fk_login_user_id">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>mysite</RefSchemaName>
+      <RefTableName>login_user</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="627" parent="356" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="628" parent="356" name="student_id">
+      <Position>2</Position>
+      <DataType>int(10) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="629" parent="356" name="name">
+      <Position>3</Position>
+      <DataType>varchar(128)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="630" parent="356" name="password">
+      <Position>4</Position>
+      <DataType>varchar(256)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="631" parent="356" name="email">
+      <Position>5</Position>
+      <DataType>varchar(254)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="632" parent="356" name="sex">
+      <Position>6</Position>
+      <DataType>varchar(32)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="633" parent="356" name="c_time">
+      <Position>7</Position>
+      <DataType>datetime(6)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="634" parent="356" name="Profile_photo">
+      <Position>8</Position>
+      <DataType>varchar(100)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="635" parent="356" name="auth">
+      <Position>9</Position>
+      <DataType>varchar(128)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="636" parent="356" name="school">
+      <Position>10</Position>
+      <DataType>varchar(256)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="637" parent="356" name="student_id">
+      <ColNames>student_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="638" parent="356" name="login_user_name_student_id_baff7b60_uniq">
+      <ColNames>name
+student_id</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <index id="639" parent="356" name="email">
+      <ColNames>email</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="640" parent="356" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="641" parent="356" name="student_id">
+      <ColNames>student_id</ColNames>
+      <UnderlyingIndexName>student_id</UnderlyingIndexName>
+    </key>
+    <key id="642" parent="356" name="login_user_name_student_id_baff7b60_uniq">
+      <ColNames>name
+student_id</ColNames>
+      <UnderlyingIndexName>login_user_name_student_id_baff7b60_uniq</UnderlyingIndexName>
+    </key>
+    <key id="643" parent="356" name="email">
+      <ColNames>email</ColNames>
+      <UnderlyingIndexName>email</UnderlyingIndexName>
+    </key>
   </database-model>
 </dataSource>
