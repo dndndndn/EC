@@ -14,24 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path ,include
-from login import views
+from django.urls import path, include, re_path
+from login import views as login_views
+from android import views as android_views
 from django.contrib.staticfiles.urls import static
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', include('login.urls')),
 #   path('out/',include('circuit.urls'))
-    path('', views.admin,name='login'),
-    path('index/', views.index,name='index'),
-    path('login/', views.login,name='login'),
-    path('register/', views.register,name='register'),
-    path('logout/', views.logout,name='logout'),
-    path('captcha/', include('captcha.urls'))
+                  path('', login_views.admin, name='login'),
+                  path('index/', login_views.index, name='index'),
+                  path('login/', login_views.login, name='login'),
+                  path('register/', login_views.register, name='register'),
+                  path('logout/', login_views.logout, name='logout'),
+                  path('captcha/', include('captcha.urls')),
+                  path('resources/<path:path>/', android_views.resources_get, name='resource_get'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler400 = views.bad_request
-handler403 = views.permission_denied
-handler404 = views.page_not_found
-handler500 = views.page_error
+handler400 = login_views.bad_request
+handler403 = login_views.permission_denied
+handler404 = login_views.page_not_found
+handler500 = login_views.page_error

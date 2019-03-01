@@ -101,7 +101,7 @@ class Choice(models.Model):
     related_question = models.ForeignKey(Question, null=True, blank=True, related_name='choice',
                                          verbose_name='所属问题',
                                          on_delete=models.CASCADE)
-    Bool = models.BooleanField(default=True, verbose_name="正确标志")
+    Bool = models.BooleanField(default=False, verbose_name="正确标志")
     type = models.CharField(choices=tp, verbose_name="类型", max_length=10)
     text = models.TextField(blank=True, verbose_name="文字")
     img = models.FileField(upload_to=upload_chioce, blank=True)
@@ -126,10 +126,9 @@ class ChoiceTips(models.Model):
         ("img", "image")
     )
     ID = models.PositiveIntegerField(primary_key=True)
-    related_question = models.ForeignKey(Question, null=True, blank=True, related_name='choiceTips',
-                                         verbose_name='所属问题',
-                                         on_delete=models.CASCADE)
-    Bool = models.BooleanField(default=True, verbose_name="正确标志")
+    related_choice = models.OneToOneField(Choice, null=False, blank=False, related_name='choiceTips',
+                                          verbose_name='所属选项',
+                                          on_delete=models.CASCADE)
     type = models.CharField(choices=tp, verbose_name="类型", max_length=10)
     text = models.TextField(blank=True, verbose_name="文字")
     img = models.FileField(upload_to=upload_chioce, blank=True)
@@ -137,7 +136,6 @@ class ChoiceTips(models.Model):
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
     m_time = models.DateTimeField(auto_now=True, verbose_name='最新修改日期')
-    tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
 
     def __str__(self):
         return self.ID

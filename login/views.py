@@ -10,7 +10,8 @@ import os
 import json
 from openpyxl import load_workbook
 from django.core.paginator import Paginator
-
+from EC.settings import MEDIA_ROOT
+import re
 
 # Create your views here.
 # code:utf-8
@@ -149,7 +150,7 @@ def admin_account_update(request, num):
         user.name = data['name']
         user.school = data['school']
         user.email = data['email']
-        user.password = data['password']
+        user.password = hash_code(data['password'])
         user.sex = data['sex']
         print(user.student_id,
               user.name,
@@ -250,7 +251,7 @@ def admin_question_upload(request):
             question.choice_length = request.POST.get("choice_length")
             question.general_priority = 2
             choicetype = 0
-            for i in range(0, int(request.POST.get('stem_length'))):
+            for i in range(0, int(request.POST.get('choice_length'))):
                 if request.POST.get("choice" + str(i)) == "true":
                     choicetype += 1
             if choicetype > 1:
@@ -270,12 +271,7 @@ def admin_question_upload(request):
                     if request.POST.get("img" + name + str(i)):
                         list[i].type = "img"
                         obj = request.FILES.get('img' + name + str(i))
-                        file_path = os.path.join('store/upload', obj.name)
-                        f = open(file_path, 'wb')
-                        for chunk in obj.chunks():
-                            f.write(chunk)
                         list[i].img = obj
-                        f.close()
                     if request.POST.get("txt" + name + str(i)):
                         list[i].type = "txt"
                         obj = request.POST.get("txt" + name + str(i))
@@ -293,6 +289,34 @@ def admin_question_upload(request):
             question.solution = list_input(int(request.POST.get('solu_length')), "solu", android_models.Solution,
                                            question)
             question.save()
+            question.choice_length = int(request.POST.get('choice_length'))
+            for i in range(0, question.choice_length):
+                choice = android_models.Choice()
+                choice.related_question = question
+                if request.POST.get('choice' + str(i)) == 'true':
+                    choice.Bool = True
+                else:
+                    choice.Bool = False
+                if request.POST.get('txt' + 'choice' + str(i)):
+                    choice.type = 'txt'
+                    choice.text = request.POST.get('txt' + 'choice' + str(i))
+                elif request.POST.get('img' + 'choice' + str(i)):
+                    choice.type = 'img'
+                    choice.text = request.FILES.get('txt' + 'choice' + str(i))
+                choice.save()
+                if request.POST.get('choice_tips' + str(i)):
+                    continue
+                else:
+                    choicetips = android_models.ChoiceTips()
+                    choicetips.related_choice = choice
+                    if request.POST.get('txt' + 'choice' + str(i)):
+                        choicetips.type = 'txt'
+                        choicetips.text = request.POST.get('txt' + 'choice_tips' + str(i))
+                    elif request.POST.get('img' + 'choice' + str(i)):
+                        choicetips.type = 'img'
+                        choicetips.text = request.FILES.get('txt' + 'choice_tips' + str(i))
+                    choicetips.save()
+
     return response
 
 

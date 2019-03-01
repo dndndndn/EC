@@ -287,7 +287,7 @@
                     }
                     continue;
                 }
-                dic.append("chioce" + i, $(b).next().children().last().prop("checked"));
+                dic.append("choice" + i, $(b).next().children().last().prop("checked"));
                 b = b.firstChild;
                 c = $(b).parent().children().last();
                 if (b.value === "") {
@@ -376,8 +376,10 @@
                 alert("提交失败");
             }
 
-            function succFunction(tt) {
-                alert(tt);
+            function succFunction(message) {
+                if (message === '表单提交成功')
+                    alert(message);
+                window.location.href = "{% url 'question_all' 0 0%}";
             }
         }
     </script>
