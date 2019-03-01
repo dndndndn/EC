@@ -1,12 +1,24 @@
 # coding=utf-8
 
+import os
+import shutil
+
 from django.db import models
 
+from EC.settings import MEDIA_ROOT
 # Create your models here.
 from login.models import User
 
 
 class Question(models.Model):
+    def delete(self, using=None, keep_parents=False):
+        try:
+            shutil.rmtree(os.path.join(MEDIA_ROOT, 'question\%s' % (self.ID)))
+        except:
+            pass
+        models.Model.delete(self)
+        print('yes')
+
     question_status = (
         (0, '在线'),
         (1, '下线'),

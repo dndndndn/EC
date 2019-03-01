@@ -1,58 +1,112 @@
 {% extends 'admin_question.html' %}
 {% load staticfiles %}
-{% block title %}题库管理{% endblock %}
+{% block title %}用户管理{% endblock %}
 {% block sub_css %}
     <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
-    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
     <style>
-  #draggable { width: 150px; height: 150px; padding: 0.5em; }
-  </style>
+        #draggable {
+            width: 150px;
+            height: 150px;
+            padding: 0.5em;
+        }
+    </style>
 {% endblock %}
 {% block sub_js %}
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
-    <script  type="text/javascript">
-        window.onload=function(){
-            a=document.getElementById("user")
-            a.classList.add('active')
-            a.innerHTML='<a href="{% url 'admin_account' %}">用户管理</a><span class="sr-only">(current)</span>'
-            document.getElementsByClassName("row").Id='containment-wrapper'
+    <script type="text/javascript">
+        window.onload = function () {
+            a = document.getElementById("all");
+            a.classList.add('active');
+            a.innerHTML = '<a href="{% url 'admin_account' %}">所有题目</a><span class="sr-only">(current)</span>'
+            document.getElementsByClassName("row").Id = 'containment-wrapper'
+        };
+
+        function deletes() {
+            var chk_value = [];
+            $("table").find('input[name="checkbox"]:checked').each(function () {
+                chk_value.push($(this).val());
+                $(this).parent().parent().remove();
+            });
+            alert(chk_value.length === 0 ? '你还没有选择任何内容！' : chk_value);
+            $.ajax({
+                url: '{% url 'question_all' 1 1 %}',
+                type: 'POST',
+                data: chk_value,
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,  // tell jQuery not to set contentType
+                dataType: 'JSON'
+            })
+        }
+
+        function allin() {
+            var box = document.getElementById('checkall');
+            if (box.checked === false) {
+                $("[name='checkbox']").prop("checked", false);
+            }
+            else {
+                $("[name='checkbox']").prop("checked", true);
+            }
         }
     </script>
 {% endblock %}
 {% block inner_content %}
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" >
-          <h1 class="page-header">题目管理</h1>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h1 class="page-header">题目管理</h1>
 
-          <h2 class="sub-header">所有题目</h2>
-          <div class="table-responsive">
+        <h2 class="sub-header">所有题目</h2>
+        <button type="button" class="btn btn-primary" onclick="deletes()">删除所选</button>
+        <div class="table-responsive">
             <table class="table table-striped">
-              <thead>
+                <thead>
                 <tr>
-                  <th>学号</th>
-                  <th>姓名</th>
-                  <th>学院</th>
-                  <th>权限</th>
-                  <th>操作</th>
+                    <th><input type="checkbox" name="checkall" id="checkall" onclick="allin()"></th>
+                    <th>题目ID</th>
+                    <th>选项类型</th>
+                    <th>优先级</th>
+                    <th>权限</th>
+                    <th>操作</th>
                 </tr>
-              </thead>
-              <tbody>
-              {% for r in user %}
-                <tr>
-                  <td>{{ r.student_id }}</td>
-                  <td>{{ r.name }}</td>
-                  <td>{{ r.school }}</td>
-                  <td>{{ r.auth }}</td>
-                  <td>
-                      <span><a href="#">detail</a></span>
-                      <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
-                      <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
+                </thead>
+                <tbody>
+                {% for r in question %}
+                    <tr>
+                        <td><input type="checkbox" name="checkbox" id="check{{ r.ID }}"
+                                   value="{{ r.ID }}"></td>
+                        <td>{{ r.ID }}</td>
+                        <td>{{ r.choice_type }}</td>
+                        <td>{{ r.general_priority }}</td>
+                        <td>{{ r.c_time }}</td>
+                        <td>{{ r.m_time }}</td>
+                        <td>
+                            <span><a href="{% url 'account_update' r.ID %}">detail</a></span>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
             </table>
-          </div>
+        </div>
+        <div class=" col-sm-offset-5">
+            <ul class="pagination">
+                {% if question.has_previous %}
+                    <li><a href="{% url 'account_all' 0 1 %}">&laquo;</a></li>
+                    <li>
+                        <a href="{% url 'account_all' 0 question.previous_page_number %}">{{ question.previous_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li class="active"><a href="{% url 'account_all' 0 question.number %}">{{ question.number }}</a></li>
+                {% if question.has_next %}
+                    <li>
+                        <a href="{% url 'account_all' 0 question.next_page_number %}">{{ question.next_page_number }}</a>
+                    </li>
+                    <li><a href="{% url 'account_all' 0 question.paginator.num_pages %}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+            <br>
+        </div>
     </div>
 
 

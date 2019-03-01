@@ -1,17 +1,18 @@
-from django.shortcuts import render, HttpResponse
+import hashlib
+import json
+import os
+
+from django.core.paginator import Paginator
+from django.http import StreamingHttpResponse, JsonResponse
 from django.shortcuts import redirect
+from django.shortcuts import render, HttpResponse
 from django.urls import reverse
-from django.http import FileResponse, StreamingHttpResponse, JsonResponse
+from openpyxl import load_workbook
+
+from android import models as android_models
 from . import forms
 from . import models as login_models
-from android import models as android_models
-import hashlib
-import os
-import json
-from openpyxl import load_workbook
-from django.core.paginator import Paginator
-from EC.settings import MEDIA_ROOT
-import re
+
 
 # Create your views here.
 # code:utf-8
@@ -133,7 +134,6 @@ def admin_account_all(request, tag, page):
         b = a.split(',')
         for r in b:
             user = login_models.User.objects.get(student_id=r)
-            print(user.name)
             user.delete()
         return JsonResponse(json.dumps({"success": "y"}), safe=False)
 
@@ -220,8 +220,18 @@ def admin_question(request):
 
 
 def admin_question_all(request, tag, page):
-    user = login_models.User.objects.all()
-    return render(request, 'login/admin_question_all.html', locals())
+    if request.method == 'GET':
+        question_list = android_models.Question.objects.all()
+        paginator = Paginator(question_list, 25)  # Show 25 contacts per page
+        question = paginator.get_page(page)
+        return render(request, 'login/admin_question_all.html', locals())
+    elif request.method == 'POST':
+        a = bytes.decode(request.body)
+        b = a.split(',')
+        for r in b:
+            question = android_models.Question.objects.get(ID=r)
+            question.delete()
+        return JsonResponse(json.dumps({"success": "y"}), safe=False)
 
 
 def admin_question_update(request):
@@ -230,7 +240,7 @@ def admin_question_update(request):
 
 
 def admin_question_groups(request):
-    user = login_models.User.objects.all()
+    question = login_models.User.objects.all()
     return render(request, 'login/admin_question_all.html', locals())
 
 
