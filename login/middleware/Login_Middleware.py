@@ -5,7 +5,7 @@ from ..views import login,register,index
 
 
 class IsLogin(MiddlewareMixin):
-    list=['/admin','/captcha','/login','/register']
+    list = ['/admin', '/captcha', '/login', '/register', '/resources']
 
     def process_view(self, request, callback, callback_args, callback_kwargs):
         if not request.session.get('is_login', None):

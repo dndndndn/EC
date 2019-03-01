@@ -285,6 +285,7 @@
                         inhtml.attr({"id": b.id + "alert"});
                         $(b.firstChild).append(inhtml);
                     }
+                    flag = 1;
                     continue;
                 }
                 dic.append("choice" + i, $(b).next().children().last().prop("checked"));
@@ -362,6 +363,7 @@
                     }
                 }
             }
+            console.log(flag);
             if (flag === 0)
                 $.ajax({
                     url: '{% url 'question_upload' %}',

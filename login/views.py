@@ -185,7 +185,7 @@ def admin_account_upload(request):
             q = login_models.User(
                 student_id=sheet['A' + str(row)].value,
                 name=sheet['B' + str(row)].value,
-                password=sheet['G' + str(row)].value,
+                password=hash_code(sheet['G' + str(row)].value),
                 email=sheet['C' + str(row)].value,
                 sex=sheet['D' + str(row)].value,
                 auth=sheet['F' + str(row)].value,
@@ -302,20 +302,22 @@ def admin_question_upload(request):
                     choice.text = request.POST.get('txt' + 'choice' + str(i))
                 elif request.POST.get('img' + 'choice' + str(i)):
                     choice.type = 'img'
-                    choice.text = request.FILES.get('txt' + 'choice' + str(i))
+                    choice.img = request.FILES.get('img' + 'choice' + str(i))
                 choice.save()
+
                 if request.POST.get('choice_tips' + str(i)):
                     continue
                 else:
                     choicetips = android_models.ChoiceTips()
                     choicetips.related_choice = choice
-                    if request.POST.get('txt' + 'choice' + str(i)):
+                    if request.POST.get('txt' + 'choice_tips' + str(i)):
                         choicetips.type = 'txt'
                         choicetips.text = request.POST.get('txt' + 'choice_tips' + str(i))
-                    elif request.POST.get('img' + 'choice' + str(i)):
+                    elif request.POST.get('img' + 'choice_tips' + str(i)):
                         choicetips.type = 'img'
-                        choicetips.text = request.FILES.get('txt' + 'choice_tips' + str(i))
+                        choicetips.img = request.FILES.get('img' + 'choice_tips' + str(i))
                     choicetips.save()
+                    print(choicetips.related_choice.related_question.ID)
 
     return response
 
