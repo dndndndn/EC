@@ -1,14 +1,21 @@
 {% extends 'admin_question.html' %}
 {% load staticfiles %}
-{% block title %}用户管理{% endblock %}
+{% block title %}添加题目{% endblock %}
 {% block sub_css %}
     <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
     <style>
-        #draggable {
-            width: 150px;
-            height: 150px;
-            padding: 0.5em;
+        ul {
+            list-style-type: none
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+        }
+
+        textarea {
+            resize: none;
         }
     </style>
 {% endblock %}
@@ -17,134 +24,415 @@
     <script type="text/javascript">
         window.onload = function () {
             var a = document.createElement("li");
-            var p = document.createTextNode("{{ user.student_id }}");
+            var p = document.createTextNode("{{ question.ID }}");
             a.appendChild(p);
             a.classList.add('active');
-            a.innerHTML = '<a href="{% url 'account_update' user.student_id %}">{{ user.student_id }}  </a><span class="sr-only">(current)</span>';
+            a.innerHTML = '<a href="{% url 'question_update' question.ID %}">{{ question.ID }}  </a><span class="sr-only">(current)</span>';
             b = document.getElementById("sidebar");
             b.appendChild(a);
             document.getElementsByClassName("row").Id = 'containment-wrapper';
 
-            {% if user.sex == '男' %}
-                document.getElementById("sexInput")[1].selected = true;
-            {% else %}
-                document.getElementById("sexInput")[2].selected = true;
-            {% endif %}
-            {% if user.school == '自动化与电气工程学院' %}
-                document.getElementById("schoolInput")[1].selected = true;
-            {% else %}
-                document.getElementById("schoolInput")[2].selected = true;
-            {% endif %}
+            var i = 0;
+            {% for choice in choice_list %}
+                add_choice();
+                i++;
+                {% if choice.type == "txt" %}
+                    add_choicetxt(i);
+                    b = document.getElementById("txtchoice" + i);
+                    b.value = "{{ choice.text }}";
+                {% endif %}
+                {% if choice.type == "img" %}
+                    add_choiceimg(i);
+                    b = document.getElementById("imgchoice" + i);
+                    b.defaultValue = "{{ MEDIA_URL }}{{ choice.img }}";
+                    b = document.getElementById("preimgchoice" + i);
+                    b.src = "{{ MEDIA_URL }}{{ choice.img }}";
+                {% endif %}
 
-        };
+                {% if choice.choiceTips.type == "txt" %}
+                    add_choice_tips_txt(i);
+                    b = document.getElementById("txtchoice_tips" + i);
+                    b.value = "{{ choice.choiceTips.text }}";
+                {% endif %}
+                {% if choice.choiceTips.type == "img" %}
+                    add_choice_tips_img(i);
+                    b = document.getElementById("imgchoice_tips" + i);
+                    b.defaultValue = "{{ MEDIA_URL }}{{ choice.choiceTips.img }}";
+                    b = document.getElementById("preimgchoice_tips" + i);
+                    b.src = "{{ MEDIA_URL }}{{ choice.choiceTips.img }}";
+                {% endif %}
+            {% endfor %}
+        }
+    </script>
 
-        function getformdata() {
-            var d = {};
-            var t = $('form').serializeArray();
-            $.each(t, function () {
-                d[this.name] = this.value;
-            });
-            var data = JSON.stringify(d);
-            alert(data);
-            return data;
+    <script>
+        var steml = 0;
+        var mains = 0;
+        var choice = 0;
 
+        function add_stemtxt() {
+            steml++;
+            var inhtml = $("<li></li>").html(
+                "<textarea id='" + "txtstem" + steml + "' style='width:500px; height:200px;'></textarea>" +
+                "<span onclick=\"delete_stem(\'" + "txtstem" + steml + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+            );
+            $("#endstem").before(inhtml);
         }
 
-        function Aj() {
-            console.log('inajax');
-            $.ajax({
-                    url: "{% url 'account_update' user.student_id %}",
-                    type: "POST",
-                    data: getformdata(),
-                    processData: false,
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    async: false,
-                    success: function (result) {
-                        console.log(result);//打印服务端返回的数据(调试用)
-                        alert("SUCCESS");
-                    },
-                    error: function () {
-                        alert("异常！");
+        function add_stemimg() {
+            steml++;
+            var inhtml = $("<li></li>").html(
+                "<input id='" + "imgstem" + steml +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                "<img id=\"preimgstem" + steml + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">" +
+                "<span onclick=\"delete_stem(\'" + "imgstem" + steml + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+            );
+            $("#endstem").before(inhtml);
+        }
+
+        function add_Mainsolution_txt() {
+            mains++;
+            var inhtml = $("<li></li>").html(
+                "<textarea id='" + "txtsolu" + mains + "' style='width:500px; height:200px;'></textarea>" +
+                "<span onclick=\"delete_stem(\'" + "txtsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>"
+            );
+            $("#endsolu").before(inhtml);
+        }
+
+        function add_Mainsolution_img() {
+            mains++;
+            var inhtml = $("<li></li>").html(
+                "<input id='" + "imgsolu" + mains +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/>" +
+                "<img id=\"preimgsolu" + mains + "\" src=\" {% static 'img/plus.jpg' %}\"  class=\"img-fluid\" alt=\"Responsive image\">" +
+                "<span onclick=\"delete_stem(\'" + "imgsolu" + mains + "\')\" class=\"glyphicon glyphicon-remove\"></span>>"
+            );
+            $("#endsolu").before(inhtml);
+        }
+
+        function add_choice() {
+            choice++;
+            var inhtml = $("<li></li>").attr({"id": "choice" + choice, "class": "choice"});
+            inhtml.html(
+                "<ul>" +
+                "<li id=\"endchoice" + choice + "\"><span onclick=\"add_choicetxt(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加文本选项   </span></li>" +
+                "            <li><span onclick=\"add_choiceimg(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加图片选项   </span></li>" +
+                "<li><span onclick=\"delete_choice(" + choice + ")\" class=\"glyphicon glyphicon-remove\">删除选项   </span></li>" +
+                "</ul>");
+            $("#choice").append(inhtml);
+            inhtml = $("<li></li>").attr({"id": "choice_tips" + choice, "class": "choice_tips"});
+            inhtml.html(
+                "<ul>" +
+                "<li id=\"endchoice_tips" + choice + "\"><span onclick=\"add_choice_tips_txt(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加文本提示   </span></li>" +
+                "            <li><span onclick=\"add_choice_tips_img(" + choice + ")\" class=\"glyphicon glyphicon-plus\">添加图片提示   </span></li>" +
+                "</br>" +
+                "</ul>");
+            $("#choice_tips").append(inhtml);
+        }
+
+        function delete_choice(num) {
+            $("#choice" + num).remove();
+            $("#choice_tips" + num).remove();
+        }
+
+        function delete_stem(id) {
+            console.log(id);
+            $("#" + id).parent().remove();
+        }
+
+
+        function add_choicetxt(num) {
+            var inhtml = $("<li></li>").html("<textarea id='" + "txtchoice" + num + "' style='width:300px; height:100px;'></textarea>");
+            var a = $("#endchoice" + num);
+            a.before(inhtml);
+            inhtml = $("<li></li>").html("<input id='" + "choicecorrect" + num + "'type='checkbox' value=\"True\"/>");
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function add_choiceimg(num) {
+            var inhtml = $("<li></li>").html(
+                "<input id='" + "imgchoice" + num +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                "<img id=\"preimgchoice" + num + "\" src=\" {% static 'img/plus.jpg' %}\">"
+            );
+            var a = $("#endchoice" + num);
+            a.before(inhtml);
+            inhtml = $("<li></li>").html("<input id='" + "choicecorrect" + num + "'type='checkbox' value=\"True\"/>");
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function add_choice_tips_txt(num) {
+            var inhtml = $("<li></li>").html("<textarea id='" + "txtchoice_tips" + num + "' style='width:300px; height:100px;'></textarea>" + "</br></br>");
+            var a = $("#endchoice_tips" + num);
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function add_choice_tips_img(num) {
+            var inhtml = $("<li></li>").html(
+                "<input id='" + "imgchoice_tips" + num +
+                "' onchange=\"changepic(this)\" type='file' accept=\"image/jpg,image/jpeg,image/png,image/PNG\"/> " +
+                "<img id=\"preimgchoice_tips" + num + "\" src=\" {% static 'img/plus.jpg' %}\">" + "</br></br>"
+            );
+            var a = $("#endchoice_tips" + num);
+            a.before(inhtml);
+            a.next().remove();
+            a.remove()
+        }
+
+        function changepic(obj) {
+            console.log(obj.files[0]);//这里可以获取上传文件的name
+            console.log("#pre" + obj.id);
+            a = $("#" + obj.id);
+
+            if (obj.files[0] === undefined)
+                url = "{% static 'img/plus.jpg' %}";
+            else url = URL.createObjectURL(obj.files[0]);
+            a.next().attr({"src": url});
+
+
+            console.log(a);
+        }
+
+        function Upload_form() {
+            var dic = new FormData();
+            var flag = 0;
+            dic.append('target', 'formupload');
+            var a = $("#stem").children("li");
+            var stem_length = a.length - 3;
+            if (!stem_length)//no stem
+            {
+                alert("请添加题干");
+                return;
+            }
+            dic.append('id', a.get(0).firstChild.value);
+            dic.append('stem_length', stem_length);
+            var b;
+            for (var i = 1; i <= stem_length; i++) {
+                b = a.get(i).firstChild;
+                console.log(b.id, b.value);
+                c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
+                if (b.tagName === "TEXTAREA") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        var inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtstem" + (i - 1), b.value);
+                    }
+
+                }
+                else if (b.tagName === "INPUT") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgstem" + (i - 1), "imgstem" + (i - 1));
+                        dic.append("imgstem" + (i - 1), b.files[0]);
                     }
                 }
-            );
-        }
+            }
 
+
+            //solution
+            a = $("#solu").children("li");
+            var solu_length = a.length - 2;
+            dic.append('solu_length', solu_length);
+            for (i = 0; i < solu_length; i++) {
+                b = a.get(i).firstChild;
+                console.log(b.id, b.value);
+                c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
+                if (b.tagName === "TEXTAREA") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtsolu" + i, b.value);
+                    }
+
+                }
+                else if (b.tagName === "INPUT") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgsolu" + i, "imgsolu" + i);
+                        dic.append("imgsolu" + i, b.files[0]);
+                    }
+                }
+            }
+
+            //choice
+            a = $("#choice").children("li");
+            var choice_length = a.length;
+            dic.append('choice_length', choice_length);
+            for (i = 0; i < choice_length; i++) {
+                b = a.get(i).firstChild.firstChild;
+                if (!(b.id.search(/endchoice/i) === -1)) {
+                    if (!($("#" + b.id + "alert").length > 0)) {
+                        inhtml = $("<b></b>").html("未描述选项");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b.firstChild).append(inhtml);
+                    }
+                    flag = 1;
+                    continue;
+                }
+                dic.append("choice" + i, $(b).next().children().last().prop("checked"));
+                b = b.firstChild;
+                c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
+                if (b.tagName === "TEXTAREA") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtchoice" + i, b.value);
+                    }
+
+                }
+                else if (b.tagName === "INPUT") {
+                    //todo: 添加检查是否是更新。
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgchoice" + i, "imgchoice" + i);
+                        dic.append("imgchoice" + i, b.files[0]);
+                    }
+                }
+            }
+
+            //tips
+            var a_tips = $("#choice_tips").children("li");
+            for (i = 0; i < choice_length; i++) {
+                b = a_tips.get(i).firstChild.firstChild;
+                console.log(b.id);
+                if (!(b.id.search(/endchoice_tips/i) === -1)) {
+                    dic.append("choice_tips" + i, "");
+                    continue;
+                }
+                b = b.firstChild;
+                var c = $(b).parent().children().last();
+                if (b.value === "") {
+                    flag = 1;
+                }
+                if (b.tagName === "TEXTAREA") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("txtchoice_tips" + i, b.value);
+                    }
+
+                }
+                else if (b.tagName === "INPUT") {
+                    if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
+                        inhtml = $("<p></p>").html("<b>请添加内容</b>");
+                        inhtml.attr({"id": b.id + "alert"});
+                        $(b).parent().append(inhtml);
+                    }
+                    else if (!(b.value === "")) {
+                        if (c.attr("id") === b.id + "alert")
+                            c.remove();
+                        dic.append("imgchoice_tips" + i, "imgchoice_tips" + i);
+                        dic.append("imgchoice_tips" + i, b.files[0]);
+                    }
+                }
+            }
+            console.log(flag);
+            if (flag === 0)
+                $.ajax({
+                    url: '{% url 'question_upload' %}',
+                    type: 'POST',
+                    data: dic,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    dataType: 'JSON',
+                    success: succFunction,
+                });
+            else if (flag === 1) {
+                alert("提交失败");
+            }
+
+            function succFunction(message) {
+                if (message === '表单提交成功')
+                    alert(message);
+                window.location.href = "{% url 'question_all' 0 0%}";
+            }
+        }
     </script>
 {% endblock %}
 {% block inner_content %}
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <form class="form-horizontal" role="form" id="from" onsubmit="return submit()">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="idInput" class="col-sm-2 control-label">
-                    学号：
-                </label>
-                <div class="col-sm-5">
-                    <input name='student_id' class="form-control" id="idInput" type="text"
-                           value="{{ user.student_id }}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">
-                    姓名
-                </label>
-                <div class="col-sm-5">
-                    <input name='name' class="form-control" id="inputName" type="text"
-                           value="{{ user.name }}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="passwordInput" class="col-sm-2 control-label">
-                    密码
-                </label>
-                <div class="col-sm-5">
-                    <input name='password' type="text" id="passwordInput" class="form-control"
-                           value="{{ user.password }}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="emailInput" class="col-sm-2 control-label">
-                    邮件地址
-                </label>
-                <div class="col-sm-5">
-                    <input name='email' type="text" id="emailInput" class="form-control"
-                           value="{{ user.email }}">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for='schoolInput' class="col-sm-2 control-label">
-                    学院
-                </label>
-                <div class="col-sm-5">
-                    <select name='school' class="form-control" id="schoolInput">
-                        <option value=""></option>
-                        <option value="自动化与电气工程学院">自动化与电气工程学院</option>
-                        <option value="电子信息工程学院">电子信息工程学院</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for='sexInput' class="col-sm-2 control-label">
-                    性别
-                </label>
-                <div class="col-sm-5">
-                    <select class="form-control" id="sexInput" name="sex">
-                        <option>男</option>
-                        <option>女</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-5">
-                    <button type="button" class="btn btn-default" onclick="Aj()">确认</button>
-                    <button type="button" class="btn btn-default" onclick="getformdata()">show</button>
-                </div>
-            </div>
-        </form>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #dca7a7">
+        <ul id="stem">
+            <li><input type="hidden" value="{{ question.ID }}"></li>
+            <li id="endstem"><span onclick="add_stemtxt()" class="glyphicon glyphicon-plus">添加文本题干   </span></li>
+            <li><span onclick="add_stemimg()" class="glyphicon glyphicon-plus">添加图片题干   </span></li>
+        </ul>
+        <ul id="solu">
+            <li id="endsolu"><span onclick="add_Mainsolution_txt()" class="glyphicon glyphicon-plus">添加文字解答 </span></li>
+            <li><span onclick="add_Mainsolution_img()" class="glyphicon glyphicon-plus">添加图片解答   </span></li>
+        </ul>
     </div>
+    <div id="choice_list" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+         style="background-color: #4cae4c">
+        <div class="row">
+            <div class="col-sm-3  col-md-5  " style="background-color: #5bc0de">
+                <ol id="choice">
 
+                </ol>
+            </div>
+            <div class="col-sm-3 col-md-5 " style="background-color: #dca7a7">
+                <ol id="choice_tips">
 
+                </ol>
+            </div>
+        </div>
+        <span onclick="add_choice()" class="glyphicon glyphicon-plus">添加选项   </span>
+
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #4cae4c">
+        <input type="button" value="提交JQ" onclick="Upload_form()" style="margin-left: 200px">
+    </div>
 {% endblock %}

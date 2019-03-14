@@ -13,16 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include, re_path
-from login import views as login_views
-from android import views as android_views
-from django.contrib.staticfiles.urls import static
 from django.conf import settings
+from django.contrib.staticfiles.urls import static
+from django.urls import path, include
+
+from android import views as android_views
+from login import views as login_views
 
 urlpatterns = [
-    path('admin/', include('login.urls')),
-#   path('out/',include('circuit.urls'))
+                  path('admin/', include('login.urls')),
+                  #   path('out/',include('circuit.urls'))
                   path('', login_views.admin, name='login'),
                   path('index/', login_views.index, name='index'),
                   path('login/', login_views.login, name='login'),
@@ -30,8 +30,9 @@ urlpatterns = [
                   path('logout/', login_views.logout, name='logout'),
                   path('captcha/', include('captcha.urls')),
                   path('resources/<path:path>/', android_views.resources_get, name='resource_get'),
+                  path('question/<int:ID>', android_views.question_download, name='question_download')
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = login_views.bad_request
 handler403 = login_views.permission_denied

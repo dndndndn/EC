@@ -141,6 +141,7 @@ def admin_account_all(request, tag, page):
 def admin_account_update(request, num):
     if request.method == 'GET':
         user = login_models.User.objects.get(student_id=num)
+
         return render(request, 'login/admin_account_update.html', locals())
     elif request.method == 'POST':
         user = login_models.User.objects.get(student_id=num)
@@ -211,7 +212,6 @@ def account_download(request):
     response = StreamingHttpResponse(file_itertor(file_path))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
-    print(response)
     return response
 
 
@@ -234,9 +234,16 @@ def admin_question_all(request, tag, page):
         return JsonResponse(json.dumps({"success": "y"}), safe=False)
 
 
-def admin_question_update(request):
-    user = login_models.User.objects.all()
-    return render(request, 'login/admin_question_all.html', locals())
+def admin_question_update(request, num):
+    if request.method == 'GET':
+        question = android_models.Question.objects.get(ID=num)
+        choice_length = question.choice_length
+        choice_list = question.choice.all()
+        print(choice_list.first().ID)
+        return render(request, 'login/admin_question_update.html', locals())
+    elif request.method == 'POST':
+        question = android_models.Question.objects.get(ID=num)
+    return render(request, 'login/admin_question_update.html', locals())
 
 
 def admin_question_groups(request):
@@ -315,20 +322,17 @@ def admin_question_upload(request):
                     choice.img = request.FILES.get('img' + 'choice' + str(i))
                 choice.save()
 
-                if request.POST.get('choice_tips' + str(i)):
-                    continue
+                choicetips = android_models.ChoiceTips()
+                choicetips.related_choice = choice
+                if request.POST.get('txt' + 'choice_tips' + str(i)):
+                    choicetips.type = 'txt'
+                    choicetips.text = request.POST.get('txt' + 'choice_tips' + str(i))
+                elif request.POST.get('img' + 'choice_tips' + str(i)):
+                    choicetips.type = 'img'
+                    choicetips.img = request.FILES.get('img' + 'choice_tips' + str(i))
                 else:
-                    choicetips = android_models.ChoiceTips()
-                    choicetips.related_choice = choice
-                    if request.POST.get('txt' + 'choice_tips' + str(i)):
-                        choicetips.type = 'txt'
-                        choicetips.text = request.POST.get('txt' + 'choice_tips' + str(i))
-                    elif request.POST.get('img' + 'choice_tips' + str(i)):
-                        choicetips.type = 'img'
-                        choicetips.img = request.FILES.get('img' + 'choice_tips' + str(i))
-                    choicetips.save()
-                    print(choicetips.related_choice.related_question.ID)
-
+                    choicetips.type = 'null'
+                choicetips.save()
     return response
 
 

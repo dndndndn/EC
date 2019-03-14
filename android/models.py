@@ -139,7 +139,8 @@ def upload_chioce_Tips(this, filename):
 class ChoiceTips(models.Model):
     tp = (
         ("txt", "text"),
-        ("img", "image")
+        ("img", "image"),
+        ("null", "null")
     )
     ID = models.AutoField(primary_key=True)
     related_choice = models.OneToOneField(Choice, null=False, blank=False, related_name='choiceTips',

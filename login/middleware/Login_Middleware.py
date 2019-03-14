@@ -1,11 +1,10 @@
-import sys
 from django.utils.deprecation import MiddlewareMixin
-from django.shortcuts import HttpResponse,redirect
-from ..views import login,register,index
+from django.shortcuts import redirect
+from django.utils.deprecation import MiddlewareMixin
 
 
 class IsLogin(MiddlewareMixin):
-    list = ['/admin', '/captcha', '/login', '/register', '/resources']
+    list = ['/admin', '/captcha', '/login', '/register', '/resources', '/question']
 
     def process_view(self, request, callback, callback_args, callback_kwargs):
         if not request.session.get('is_login', None):

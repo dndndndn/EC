@@ -65,8 +65,8 @@
                     <th>题目ID</th>
                     <th>选项类型</th>
                     <th>优先级</th>
-                    <th>权限</th>
-                    <th>操作</th>
+                    <th>创建时间</th>
+                    <th>修改时间</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,7 +80,7 @@
                         <td>{{ r.c_time }}</td>
                         <td>{{ r.m_time }}</td>
                         <td>
-                            <span><a href="{% url 'account_update' r.ID %}">detail</a></span>
+                            <span><a href="{% url 'question_update' r.ID %}">detail</a></span>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
                         </td>
