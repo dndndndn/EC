@@ -2,8 +2,8 @@ import os
 import re
 import zipfile
 
-from django.http import StreamingHttpResponse
 from django.shortcuts import HttpResponse
+from ranged_response import RangedFileResponse
 
 from EC.settings import MEDIA_ROOT
 
@@ -57,11 +57,10 @@ def question_download(request, ID):
     path = os.path.join(path, str(ID))
     output_path = os.path.join(MEDIA_ROOT, 'download')
     file_name = str(ID) + '.zip'
-    print(request.META)
     if os.path.exists(path):
         zip_file_path(path, output_path, file_name)
         file_path = os.path.join(output_path, file_name)
-
+        """
         def file_itertor(file_path, chunk_size=512):
             with open(file_path, 'rb') as f:
                 while True:
@@ -73,7 +72,12 @@ def question_download(request, ID):
 
         response = StreamingHttpResponse(file_itertor(file_path))
         response['Content-Type'] = 'application/octet-stream'
-        response['Content-Length'] = os.path.getsize(file_path);
+        response['Content-Length'] = os.path.getsize(file_path)
+        response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+        return response
+
+        """
+        response = RangedFileResponse(request, open(file_path, 'rb'), content_type='audio/wav')
         response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
         return response
     else:
