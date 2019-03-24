@@ -52,7 +52,6 @@ class Question(models.Model):
         (3, "用处较小"),
     )
     general_priority = models.SmallIntegerField(choices=priority, verbose_name="优先度")
-    group = models.ManyToManyField('Group', blank=True, verbose_name="分组")
     tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
 
     def __str__(self):
@@ -235,9 +234,13 @@ class EventLog(models.Model):
         verbose_name_plural = "事件纪录"
 
 
-class Group(models.Model):
+class QuestionGroup(models.Model):
     ID = models.AutoField(primary_key=True)
     name = models.CharField('分组名', max_length=32, unique=True)
+    members = models.ManyToManyField(
+        Question,
+        through='QuestionMembership',
+    )
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="Group_creater",
                                   on_delete=models.SET_NULL)
     c_day = models.DateField('创建日期', auto_now_add=True)
@@ -246,5 +249,18 @@ class Group(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = '标签'
-        verbose_name_plural = "标签"
+        verbose_name = '分组'
+        verbose_name_plural = "分组"
+
+
+class QuestionMembership(models.Model):
+    ID = models.AutoField(primary_key=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
+    name = models.CharField('分组名', max_length=32, unique=True)
+    c_day = models.DateField('创建日期', auto_now_add=True)
+    tips = models.CharField(max_length=25, verbose_name='备注')
+
+    class Meta:
+        verbose_name = '分组关系表'
+        verbose_name_plural = "分组关系表"

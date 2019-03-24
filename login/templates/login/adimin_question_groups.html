@@ -1,6 +1,6 @@
 {% extends 'admin_question.html' %}
 {% load staticfiles %}
-{% block title %}用户管理{% endblock %}
+{% block title %}题目分组{% endblock %}
 {% block sub_css %}
     <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
@@ -16,11 +16,15 @@
     <script src="{% static 'js/jquery-ui.min.js' %}"></script>
     <script type="text/javascript">
         window.onload = function () {
-            a = document.getElementById("all");
+            a = document.getElementById("groups");
             a.classList.add('active');
-            //a.innerHTML = '<a href="{% url 'admin_account' %}">所有题目</a><span class="sr-only">(current)</span>'
+            //a.innerHTML = '<a href="{% url 'admin_account' %}">题目分组</a><span class="sr-only">(current)</span>'
             document.getElementsByClassName("row").Id = 'containment-wrapper'
         };
+
+        function creates() {
+            window.location.href = "{% url 'question_groups_new' %}";
+        }
 
         function deletes() {
             var chk_value = [];
@@ -53,24 +57,25 @@
 {% block inner_content %}
 
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 class="page-header">题目管理</h1>
+        <h1 class="page-header">题目分组</h1>
 
-        <h2 class="sub-header">所有题目</h2>
+        <h2 class="sub-header">所有分组</h2>
+        <button type="button" class="btn btn-primary" onclick="creates()">新建分组</button>
         <button type="button" class="btn btn-primary" onclick="deletes()">删除所选</button>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th><input type="checkbox" name="checkall" id="checkall" onclick="allin()"></th>
-                    <th>题目ID</th>
-                    <th>选项类型</th>
-                    <th>优先级</th>
-                    <th>创建时间</th>
+                    <th>分组ID</th>
+                    <th>分组名</th>
+                    <th>题目数</th>
+                    <th>创建人</th>
                     <th>修改时间</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for r in question %}
+                {% for r in groups %}
                     <tr>
                         <td><input type="checkbox" name="checkbox" id="check{{ r.ID }}"
                                    value="{{ r.ID }}"></td>
@@ -80,7 +85,7 @@
                         <td>{{ r.c_time }}</td>
                         <td>{{ r.m_time }}</td>
                         <td>
-                            <span><a href="{% url 'question_update' r.ID %}">detail</a></span>
+                            <span><a href="">detail</a></span>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
                         </td>
@@ -91,18 +96,18 @@
         </div>
         <div class=" col-sm-offset-5">
             <ul class="pagination">
-                {% if question.has_previous %}
+                {% if groups.has_previous %}
                     <li><a href="{% url 'account_all' 0 1 %}">&laquo;</a></li>
                     <li>
-                        <a href="{% url 'account_all' 0 question.previous_page_number %}">{{ question.previous_page_number }}</a>
+                        <a href="{% url 'account_all' 0 groups.previous_page_number %}">{{ groups.previous_page_number }}</a>
                     </li>
                 {% endif %}
-                <li class="active"><a href="{% url 'account_all' 0 question.number %}">{{ question.number }}</a></li>
-                {% if question.has_next %}
+                <li class="active"><a href="{% url 'account_all' 0 groups.number %}">{{ groups.number }}</a></li>
+                {% if groups.has_next %}
                     <li>
-                        <a href="{% url 'account_all' 0 question.next_page_number %}">{{ question.next_page_number }}</a>
+                        <a href="{% url 'account_all' 0 groups.next_page_number %}">{{ groups.next_page_number }}</a>
                     </li>
-                    <li><a href="{% url 'account_all' 0 question.paginator.num_pages %}">&raquo;</a></li>
+                    <li><a href="{% url 'account_all' 0 groups.paginator.num_pages %}">&raquo;</a></li>
                 {% endif %}
             </ul>
             <br>

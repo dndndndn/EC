@@ -25,10 +25,7 @@ urlpatterns = [
                   #   path('out/',include('circuit.urls'))
                   path('', login_views.admin, name='login'),
                   path('index/', login_views.index, name='index'),
-                  path('login/', login_views.login, name='login'),
-                  path('register/', login_views.register, name='register'),
-                  path('logout/', login_views.logout, name='logout'),
-                  path('captcha/', include('captcha.urls')),
+                  path('login/', android_views.login, name='android_login'),
                   path('resources/<path:path>/', android_views.resources_get, name='resource_get'),
                   path('question/<int:ID>', android_views.question_download, name='question_download')
 

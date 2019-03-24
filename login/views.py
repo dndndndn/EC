@@ -47,7 +47,7 @@ def login(request):
                     request.session['is_login'] = True
                     request.session['user_id'] = user.id
                     request.session['username'] = user.name
-                    return redirect('/index/')
+                    return redirect(reverse('index'))
                 else:
                     message = "密码错误"
             except:
@@ -57,7 +57,7 @@ def login(request):
 
 def register(request):
     if request.session.get('is_login', None):
-        return redirect("/admin/")
+        return redirect(reverse('admin'))
     register_form = forms.RegisterForm()
     if request.method == "POST":
         register_form = forms.RegisterForm(request.POST)
@@ -91,15 +91,15 @@ def register(request):
                 new_user.email = email
                 new_user.sex = sex
                 new_user.save()
-                return redirect('/login/')
+                return redirect(reverse('login'))
     return render(request, 'login/register.html', locals())
 
 
 def logout(request):
     if not request.session.get('is_login', None):
-        return redirect("/login/")
+        return redirect(reverse('login'))
     request.session.flush()
-    return redirect("/login/")
+    return redirect(reverse('login'))
 
 
 from django.core.cache import cache
@@ -116,7 +116,7 @@ def expire_page(path):
 
 
 def admin(request):
-    return redirect("/admin/account")
+    return redirect(reverse('account_all', args=(0, 1)))
 
 
 def admin_account(request):
@@ -246,9 +246,17 @@ def admin_question_update(request, num):
     return render(request, 'login/admin_question_update.html', locals())
 
 
-def admin_question_groups(request):
-    question = login_models.User.objects.all()
-    return render(request, 'login/admin_question_all.html', locals())
+def admin_question_groups(request, num):
+    groups_list = android_models.QuestionGroup.objects.all()
+    paginator = Paginator(groups_list, 25)  # Show 25 contacts per page
+    groups = paginator.get_page(num)
+    return render(request, 'login/adimin_question_groups.html', locals())
+
+
+def admin_question_groups_new(request):
+    # todo:new groups
+    user = login_models.User.objects.get(student_id=156)
+    return render(request, 'login/admin_question_groups_new.html', locals())
 
 
 def admin_question_upload(request):
@@ -388,7 +396,7 @@ def admin_feedback(request):
 
 
 def user_filter(request):
-    return redirect("/index/")
+    return redirect(reverse('register'))
 
 
 def user_detail(request, id, name):

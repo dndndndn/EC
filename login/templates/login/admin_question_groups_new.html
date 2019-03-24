@@ -1,0 +1,150 @@
+{% extends 'admin_question.html' %}
+{% load staticfiles %}
+{% block title %}用户管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
+    <style>
+        #draggable {
+            width: 150px;
+            height: 150px;
+            padding: 0.5em;
+        }
+    </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            var a = document.createElement("li");
+            var p = document.createTextNode("新建分组");
+            a.appendChild(p);
+            a.classList.add('active');
+            a.innerHTML = '<a href="#">{{ user.student_id }}  </a><span class="sr-only">(current)</span>';
+            b = document.getElementById("sidebar");
+            b.appendChild(a);
+            document.getElementsByClassName("row").Id = 'containment-wrapper';
+
+            {% if user.sex == '男' %}
+                document.getElementById("sexInput")[1].selected = true;
+            {% else %}
+                document.getElementById("sexInput")[2].selected = true;
+            {% endif %}
+            {% if user.school == '自动化与电气工程学院' %}
+                document.getElementById("schoolInput")[1].selected = true;
+            {% else %}
+                document.getElementById("schoolInput")[2].selected = true;
+            {% endif %}
+
+        };
+
+        function getformdata() {
+            var d = {};
+            var t = $('form').serializeArray();
+            $.each(t, function () {
+                d[this.name] = this.value;
+            });
+            var data = JSON.stringify(d);
+            alert(data);
+            return data;
+
+        }
+
+        function Aj() {
+            console.log('inajax');
+            $.ajax({
+                    url: "{% url 'account_update' user.student_id %}",
+                    type: "POST",
+                    data: getformdata(),
+                    processData: false,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        console.log(result);//打印服务端返回的数据(调试用)
+                        alert("SUCCESS");
+                    },
+                    error: function () {
+                        alert("异常！");
+                    }
+                }
+            );
+        }
+
+    </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <form class="form-horizontal" role="form" id="from" onsubmit="return submit()">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="idInput" class="col-sm-2 control-label">
+                    学号：
+                </label>
+                <div class="col-sm-5">
+                    <input name='student_id' class="form-control" id="idInput" type="text"
+                           value="{{ user.student_id }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName" class="col-sm-2 control-label">
+                    姓名
+                </label>
+                <div class="col-sm-5">
+                    <input name='name' class="form-control" id="inputName" type="text"
+                           value="{{ user.name }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="passwordInput" class="col-sm-2 control-label">
+                    密码
+                </label>
+                <div class="col-sm-5">
+                    <input name='password' type="text" id="passwordInput" class="form-control"
+                           value="{{ user.password }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="emailInput" class="col-sm-2 control-label">
+                    邮件地址
+                </label>
+                <div class="col-sm-5">
+                    <input name='email' type="text" id="emailInput" class="form-control"
+                           value="{{ user.email }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for='schoolInput' class="col-sm-2 control-label">
+                    学院
+                </label>
+                <div class="col-sm-5">
+                    <select name='school' class="form-control" id="schoolInput">
+                        <option value=""></option>
+                        <option value="自动化与电气工程学院">自动化与电气工程学院</option>
+                        <option value="电子信息工程学院">电子信息工程学院</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for='sexInput' class="col-sm-2 control-label">
+                    性别
+                </label>
+                <div class="col-sm-5">
+                    <select class="form-control" id="sexInput" name="sex">
+                        <option>男</option>
+                        <option>女</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-5">
+                    <button type="button" class="btn btn-default" onclick="Aj()">确认</button>
+                    <button type="button" class="btn btn-default" onclick="getformdata()">show</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}

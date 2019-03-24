@@ -1,11 +1,15 @@
+import hashlib
+import json
 import os
 import re
 import zipfile
 
+from django.http import JsonResponse
 from django.shortcuts import HttpResponse
 from ranged_response import RangedFileResponse
 
 from EC.settings import MEDIA_ROOT
+from login import models as login_models
 
 
 # Create your views here.
@@ -82,3 +86,28 @@ def question_download(request, ID):
         return response
     else:
         return HttpResponse("bad request")
+
+
+def hash_code(s, salt='mysite'):
+    h = hashlib.sha256()
+    s += salt
+    h.update(s.encode())
+    return h.hexdigest()
+
+
+def login(request):
+    if request.method == "POST":
+        receive_data = json.loads(request.body.decode())
+        username = receive_data['name']
+        password = receive_data['password']
+        print(username, password)
+        try:
+            user = login_models.User.objects.get(name=username)
+            if user.password == hash_code(password):
+                message = "password correct"
+            else:
+                message = "password error"
+        except:
+            message = "user not exist"
+    response = JsonResponse({"result": message}, safe=False)
+    return response
