@@ -72,6 +72,7 @@
                     <th>题目数</th>
                     <th>创建人</th>
                     <th>修改时间</th>
+                    <th>备注</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -80,12 +81,13 @@
                         <td><input type="checkbox" name="checkbox" id="check{{ r.ID }}"
                                    value="{{ r.ID }}"></td>
                         <td>{{ r.ID }}</td>
-                        <td>{{ r.choice_type }}</td>
-                        <td>{{ r.general_priority }}</td>
-                        <td>{{ r.c_time }}</td>
-                        <td>{{ r.m_time }}</td>
+                        <td>{{ r.name }}</td>
+                        <td>{{ r.count }}</td>
+                        <td>{{ r.create_by }}</td>
+                        <td>{{ r.c_day }}</td>
+                        <td>{{ r.tips }}</td>
                         <td>
-                            <span><a href="">detail</a></span>
+                            <span><a href="{% url 'question_groups_update' r.ID %}">detail</a></span>
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"><a href="#"></a></span>
                             <span class="glyphicon glyphicon-minus" aria-hidden="true"><a href="#"></a></span>
                         </td>
@@ -97,17 +99,17 @@
         <div class=" col-sm-offset-5">
             <ul class="pagination">
                 {% if groups.has_previous %}
-                    <li><a href="{% url 'account_all' 0 1 %}">&laquo;</a></li>
+                    <li><a href="{% url 'account_groups' 1 %}">&laquo;</a></li>
                     <li>
-                        <a href="{% url 'account_all' 0 groups.previous_page_number %}">{{ groups.previous_page_number }}</a>
+                        <a href="{% url 'account_groups'  groups.previous_page_number %}">{{ groups.previous_page_number }}</a>
                     </li>
                 {% endif %}
-                <li class="active"><a href="{% url 'account_all' 0 groups.number %}">{{ groups.number }}</a></li>
+                <li class="active"><a href="{% url 'account_groups'  groups.number %}">{{ groups.number }}</a></li>
                 {% if groups.has_next %}
                     <li>
-                        <a href="{% url 'account_all' 0 groups.next_page_number %}">{{ groups.next_page_number }}</a>
+                        <a href="{% url 'account_groups'  groups.next_page_number %}">{{ groups.next_page_number }}</a>
                     </li>
-                    <li><a href="{% url 'account_all' 0 groups.paginator.num_pages %}">&raquo;</a></li>
+                    <li><a href="{% url 'account_groups'  groups.paginator.num_pages %}">&raquo;</a></li>
                 {% endif %}
             </ul>
             <br>

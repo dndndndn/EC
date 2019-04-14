@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.shortcuts import reverse
 from django.utils.deprecation import MiddlewareMixin
 
 
@@ -10,5 +11,5 @@ class IsLogin(MiddlewareMixin):
             for s in self.list:
                 if request.path.startswith(s):
                      return callback(request,*callback_args,**callback_kwargs)
-            return redirect('/admin/login/')
+            return redirect(reverse('in'))
         return callback(request, *callback_args, **callback_kwargs)

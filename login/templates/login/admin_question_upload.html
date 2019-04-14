@@ -195,6 +195,7 @@
                 alert("请添加题干");
                 return;
             }
+            dic.append('groups', $("#groupsInput").value);
             dic.append('id', a.get(0).firstChild.value);
             dic.append('stem_length', stem_length);
             var b;
@@ -210,21 +211,18 @@
                         var inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("txtstem" + (i - 1), b.value);
                     }
 
-                }
-                else if (b.tagName === "INPUT") {
+                } else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("imgstem" + (i - 1), "imgstem" + (i - 1));
@@ -250,21 +248,18 @@
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("txtsolu" + i, b.value);
                     }
 
-                }
-                else if (b.tagName === "INPUT") {
+                } else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("imgsolu" + i, "imgsolu" + i);
@@ -299,21 +294,18 @@
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("txtchoice" + i, b.value);
                     }
 
-                }
-                else if (b.tagName === "INPUT") {
+                } else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("imgchoice" + i, "imgchoice" + i);
@@ -341,21 +333,18 @@
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("txtchoice_tips" + i, b.value);
                     }
 
-                }
-                else if (b.tagName === "INPUT") {
+                } else if (b.tagName === "INPUT") {
                     if (b.value === "" && !(c.attr("id") === b.id + "alert")) {
                         inhtml = $("<p></p>").html("<b>请添加内容</b>");
                         inhtml.attr({"id": b.id + "alert"});
                         $(b).parent().append(inhtml);
-                    }
-                    else if (!(b.value === "")) {
+                    } else if (!(b.value === "")) {
                         if (c.attr("id") === b.id + "alert")
                             c.remove();
                         dic.append("imgchoice_tips" + i, "imgchoice_tips" + i);
@@ -395,7 +384,20 @@
         <input type="button" value="下载样例" onclick="window.location.href='{% url 'download_account' %}'"/>
 
     </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main form-group">
+        <label for='groupsInput' class="col-sm-2 control-label">
+            分组
+        </label>
+        <div class="col-sm-5">
+            <select name='groups' class="form-control" id="groupsInput">
+                <option value="第一章">第一章</option>
+                <option value="第二章">第二章</option>
+            </select>
+        </div>
+    </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="background-color: #dca7a7">
+
+
         <ul id="stem">
             <li><input type="hidden" value="dfb"></li>
             <li id="endstem"><span onclick="add_stemtxt()" class="glyphicon glyphicon-plus">添加文本题干   </span></li>

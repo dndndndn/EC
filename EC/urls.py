@@ -22,8 +22,8 @@ from login import views as login_views
 
 urlpatterns = [
                   path('admin/', include('login.urls')),
-                  #   path('out/',include('circuit.urls'))
-                  path('', login_views.admin, name='login'),
+                  #   path('out/',include('circuit.urls')),
+                  path('', login_views.ins, name='in'),
                   path('index/', login_views.index, name='index'),
                   path('login/', android_views.login, name='android_login'),
                   path('resources/<path:path>/', android_views.resources_get, name='resource_get'),

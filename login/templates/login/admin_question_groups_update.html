@@ -1,0 +1,240 @@
+{% extends 'admin_question.html' %}
+{% load staticfiles %}
+{% block title %}用户管理{% endblock %}
+{% block sub_css %}
+    <link href="{% static 'css/admin_account.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.min.css' %}"/>
+    <style>
+        #draggable {
+            width: 150px;
+            height: 150px;
+            padding: 0.5em;
+        }
+    </style>
+{% endblock %}
+{% block sub_js %}
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript">
+        var IDdic = new Array();
+        window.onload = function () {
+            var a = document.createElement("li");
+            var p = document.createTextNode("新建分组");
+            a.appendChild(p);
+            a.classList.add('active');
+            a.innerHTML = '<a href="#"> 新建分组 </a><span class="sr-only">(current)</span>';
+            b = document.getElementById("sidebar");
+            b.appendChild(a);
+            document.getElementsByClassName("row").Id = 'containment-wrapper';
+
+            $('input.inid').each(
+                function () {
+                    IDdic.push(this.value)
+                }
+            );
+            console.log((IDdic));
+
+        };
+
+        function arrayremove(arr, value) {
+            var i = arr.length;
+            console.log(i);
+            while (i--) {
+                if (arr[i] === value) {
+                    return i;
+                }
+            }
+            return false;
+        }
+
+
+        function Add() {
+            $('input.outid').each(
+                function () {
+                    console.log(this);
+                    if (this.checked) {
+                        IDdic.push(this.value);
+                        console.log(IDdic);
+                        this.setAttribute('class', 'inid');
+                        this.checked = false;
+                        var pick = $('#inquestion').append($(this).parent().parent());
+                    }
+                }
+            );
+            console.log(IDdic);
+        }
+
+        function Remove() {
+            $('input.inid').each(
+                function () {
+                    if (this.checked) {
+                        console.log(arrayremove(IDdic, this.value));
+
+                        IDdic.splice(arrayremove(IDdic, this.value), 1);
+
+                        console.log(IDdic);
+                        this.setAttribute('class', 'outid');
+                        this.checked = false;
+                        var pick = $('#outquestion').append($(this).parent().parent());
+                    }
+                }
+            );
+            console.log(IDdic);
+        }
+
+        var checkindex = 1;
+
+        function allin(str) {
+
+            if (checkindex === 1) {
+                $('input.' + str).each(
+                    function () {
+                        this.checked = true;
+                    }
+                );
+                checkindex = 0;
+            } else {
+                $('input.' + str).each(
+                    function () {
+                        this.checked = false;
+                    }
+                );
+                checkindex = 1;
+            }
+        }
+
+        function getformdata() {
+            var dic = new FormData();
+            var t = $('form').serializeArray();
+            $.each(t, function () {
+                dic.append(this.name, this.value);
+            });
+            dic.append('groupsID', IDdic);
+            alert(dic);
+            return dic;
+
+        }
+
+        function Aj() {
+            console.log('inajax');
+            $.ajax({
+                    url: "{% url 'question_groups_update' questionGroups.ID %}",
+                    type: "POST",
+                    data: getformdata(),
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        console.log(result);//打印服务端返回的数据(调试用)
+                        alert("SUCCESS");
+                        window.location.href = "{% url 'question_groups' 0%}";
+                    },
+                    error: function () {
+                        alert("异常！");
+                    }
+                }
+            );
+        }
+
+    </script>
+{% endblock %}
+{% block inner_content %}
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <form class="form-horizontal" role="form" id="from" onsubmit="return submit()">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="nameInput" class="col-sm-2 control-label">
+                    分组名：
+                </label>
+                <div class="col-sm-5">
+                    <input name='groups_name' class="form-control" id="idInput" type="text"
+                           value="{{ questionGroups.name }}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputTips" class="col-sm-2 control-label">
+                    备注：
+                </label>
+                <div class="col-sm-5">
+                    <input name='Tips' class="form-control" id="inputTips" type="text"
+                           value="{{ questionGroups.tips }}">
+                </div>
+            </div>
+
+
+        </form>
+        <div class="row">
+            <div class="col-sm-5  col-md-5 panel panel-default pre-scrollable" style="height:0px;padding-bottom:100%">
+                <div><h1>未添加题目</h1></div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="outquestion">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" name="checkall" id="checkall" onclick="allin('outid')"></th>
+                            <th>题目ID</th>
+                            <th>题名</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for r in outquestion %}
+                            <tr>
+                                <td><input type="checkbox" name="checkbox" class="outid" id="check{{ r.ID }}"
+                                           value="{{ r.ID }}"></td>
+                                <td>{{ r.ID }}</td>
+                                <td>{{ r.choice_type }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-sm-2  col-md-2" style="height:0px;padding-bottom:100%">
+                <div class="col-sm-12  col-md-12" style="margin-top: 400px">
+
+                    <button type="button" class="btn btn-default btn-lg" style="margin-right:0px;margin-left:0px;"
+                            onclick="Add()">---》添加---》
+                    </button>
+                </div>
+                <div class="col-sm-12  col-md-12">
+                    <button type="button" class="btn btn-default btn-lg" style="margin-right:0px;margin-left:0px;"
+                            onclick="Remove()">《---移除《---
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-5  col-md-5 panel panel-default pre-scrollable" style="height:0px;padding-bottom:100%">
+                <div><h1>已添加题目</h1></div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="inquestion">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" name="checkall" id="checkall" onclick="allin('inid')"></th>
+                            <th>题目ID</th>
+                            <th>题名</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for r in inquestion %}
+                            <tr>
+                                <td><input type="checkbox" name="checkbox" class="inid" id="check{{ r.ID }}"
+                                           value="{{ r.ID }}"></td>
+                                <td>{{ r.ID }}</td>
+                                <td>{{ r.choice_type }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-5">
+                <button type="button" class="btn btn-default" onclick="Aj()">确认</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

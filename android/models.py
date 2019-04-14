@@ -33,9 +33,13 @@ class Question(models.Model):
     )
     ID = models.AutoField(primary_key=True)
     Q_Status = models.SmallIntegerField(choices=question_status, verbose_name="状态", default=2)
+    # 章节
+    # 难度
+    # 两级
     text = models.CharField(max_length=15, null=True, blank=True, verbose_name="题目标题", default="")
     choice_type = models.SmallIntegerField(choices=choice_type, verbose_name="选项类型")
     choice_length = models.SmallIntegerField(verbose_name="选项长度")
+    url = models.CharField(max_length=256, verbose_name='url')
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="question_creater",
                                   on_delete=models.SET_NULL)
     c_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
@@ -46,16 +50,19 @@ class Question(models.Model):
                                     blank=True)
     AC = models.PositiveIntegerField(verbose_name="全对人数", default=0)
     priority = (
-        (0, "关键"),
-        (1, "重要"),
-        (2, "一般"),
-        (3, "用处较小"),
+        (0, "难"),
+        (1, "较难"),
+        (2, "适中"),
+        (3, "较易"),
+        (4, "易"),
     )
     general_priority = models.SmallIntegerField(choices=priority, verbose_name="优先度")
-    tags = models.ManyToManyField('Tag', blank=True, verbose_name='标签')
+    tags = models.ManyToManyField('Tag', blank=True, verbose_name='知识点标签')
+
+    #标签
 
     def __str__(self):
-        return self.ID
+        return str(self.ID)
 
     class Meta:
         ordering = ["-c_time"]
@@ -104,6 +111,7 @@ def upload_chioce(this, filename):
 
 
 class Choice(models.Model):
+    #空按钮
     tp = (
         ("txt", "text"),
         ("img", "image")
@@ -135,6 +143,7 @@ def upload_chioce_Tips(this, filename):
     return 'question/%s/ChoiceTips/%s' % (this.related_choice.related_question.ID, filename)
 
 
+#一个solution
 class ChoiceTips(models.Model):
     tp = (
         ("txt", "text"),
@@ -168,7 +177,7 @@ class Record(models.Model):
                                             verbose_name='所属问题', on_delete=models.CASCADE)
     user = models.ForeignKey(User, null=True, blank=True, verbose_name='用户', related_name="r_user",
                              on_delete=models.CASCADE)
-    begin_time = models.DateTimeField(auto_now_add=True, verbose_name='创建日期')
+    #
     AC = models.BooleanField(default=False)
     end_time = models.DateTimeField(auto_now_add=True, verbose_name='完成日期')
     duration = models.DurationField()
@@ -241,9 +250,11 @@ class QuestionGroup(models.Model):
         Question,
         through='QuestionMembership',
     )
+    count = models.IntegerField(default=0, verbose_name='题目数')
     create_by = models.ForeignKey(User, null=True, blank=True, verbose_name='创建人', related_name="Group_creater",
                                   on_delete=models.SET_NULL)
     c_day = models.DateField('创建日期', auto_now_add=True)
+    tips = models.CharField(max_length=128, null=True, blank=True, verbose_name='备注')
 
     def __str__(self):
         return self.name
@@ -257,10 +268,18 @@ class QuestionMembership(models.Model):
     ID = models.AutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     group = models.ForeignKey(QuestionGroup, on_delete=models.CASCADE)
-    name = models.CharField('分组名', max_length=32, unique=True)
     c_day = models.DateField('创建日期', auto_now_add=True)
     tips = models.CharField(max_length=25, verbose_name='备注')
 
     class Meta:
         verbose_name = '分组关系表'
         verbose_name_plural = "分组关系表"
+
+
+class statisic(models.Model):
+    ID = models.AutoField(primary_key=True)
+    # 每道题 真确率 每道题每个选项的选择。
+    # 主观题批改待定
+    # 每个知识点 错误率， 总人数，
+    # 每个人 最近做的题 总错误率 按章节错误率 按知识点错误率
+    #评价

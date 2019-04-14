@@ -16,6 +16,9 @@ from . import models as login_models
 
 # Create your views here.
 # code:utf-8
+def ins(request):
+    return redirect(reverse('login'))
+
 
 def index(request):
     user = login_models.User.objects.get(name=request.session['username'])
@@ -173,29 +176,51 @@ def admin_account_upload(request):
         user = login_models.User.objects.all()
         return render(request, 'login/admin_account_upload.html', locals())
     elif request.method == 'POST':
-        obj = request.FILES.get('fafafa')
-        file_path = os.path.join('store/upload', obj.name)
-        f = open(file_path, 'wb')
-        for chunk in obj.chunks():
-            f.write(chunk)
-        f.close()
-        response = HttpResponse(json.dumps('shangch'))
-        wb = load_workbook(r"G:\server\EC\store\upload\用户.xlsx")
-        sheet = wb.get_sheet_by_name("Sheet1")
-        for row in range(2, sheet.max_row + 1):
-            q = login_models.User(
-                student_id=sheet['A' + str(row)].value,
-                name=sheet['B' + str(row)].value,
-                password=hash_code(sheet['G' + str(row)].value),
-                email=sheet['C' + str(row)].value,
-                sex=sheet['D' + str(row)].value,
-                auth=sheet['F' + str(row)].value,
-                school=sheet['E' + str(row)].value
-            )
-            q.save()
-    return response
+        print(request.POST.get('target'))
+        if request.POST.get('target') == 'new':
+            user = login_models.User()
+            data = request.POST
+            print(data)
+            user.student_id = data['student_id']
+            user.name = data['name']
+            user.school = data['school']
+            user.email = data['email']
+            user.password = hash_code(data['password'])
+            user.sex = data['sex']
+            print(user.student_id,
+                  user.name,
+                  user.school,
+                  user.email,
+                  user.password,
+                  user.school)
+            user.save()
+            return JsonResponse(json.dumps({"success": "y"}), safe=False)
+        if request.POST.get('target') == 'upload':
+            obj = request.FILES.get('fafafa')
+            file_path = os.path.join('store/upload', obj.name)
+            f = open(file_path, 'wb')
+            for chunk in obj.chunks():
+                f.write(chunk)
+            f.close()
+            response = HttpResponse(json.dumps('shangch'))
+            wb = load_workbook(r"G:\server\EC\store\upload\用户.xlsx")
+            sheet = wb.get_sheet_by_name("Sheet1")
+            for row in range(2, sheet.max_row + 1):
+                q = login_models.User(
+                    student_id=sheet['A' + str(row)].value,
+                    name=sheet['B' + str(row)].value,
+                    password=hash_code(sheet['G' + str(row)].value),
+                    email=sheet['C' + str(row)].value,
+                    sex=sheet['D' + str(row)].value,
+                    auth=sheet['F' + str(row)].value,
+                    school=sheet['E' + str(row)].value
+                )
+                q.save()
+    return JsonResponse(json.dumps({"success": "n"}), safe=False)
 
 
+# TODO：概要文档
+# TODO：搜集信息
 def account_download(request):
     file_path = r'G:\server\EC\store\download\用户表.xlsx'
     file_name = 'as.xlsx'
@@ -247,16 +272,81 @@ def admin_question_update(request, num):
 
 
 def admin_question_groups(request, num):
-    groups_list = android_models.QuestionGroup.objects.all()
-    paginator = Paginator(groups_list, 25)  # Show 25 contacts per page
-    groups = paginator.get_page(num)
-    return render(request, 'login/adimin_question_groups.html', locals())
+    if request.method == 'GET':
+        groups_list = android_models.QuestionGroup.objects.all()
+        paginator = Paginator(groups_list, 25)  # Show 25 contacts per page
+        groups = paginator.get_page(num)
+        return render(request, 'login/adimin_question_groups.html', locals())
+    elif request.method == 'POST':
+        a = bytes.decode(request.body)
+        b = a.split(',')
+        for r in b:
+            question = android_models.QuestionGroup.objects.get(ID=r)
+            question.delete()
+        return JsonResponse(json.dumps({"success": "y"}), safe=False)
 
 
 def admin_question_groups_new(request):
     # todo:new groups
-    user = login_models.User.objects.get(student_id=156)
+    if request.method == "GET":
+        outquestion = android_models.Question.objects.all()
+    elif request.method == "POST":
+        print(request.POST)
+        group = android_models.QuestionGroup()
+        group.name = request.POST.get('groups_name')
+        group.tips = request.POST.get('Tips')
+        group.save()
+        return JsonResponse(json.dumps({"success": "y"}), safe=False)
     return render(request, 'login/admin_question_groups_new.html', locals())
+
+
+def admin_question_groups_update(request, ID):
+    # todo:new groups
+    if request.method == "GET":
+        questionGroups = android_models.QuestionGroup.objects.get(ID=ID)
+        print(questionGroups)
+        inquestion = questionGroups.members.all()
+        print(inquestion)
+        outquestion = android_models.Question.objects.exclude(questiongroup__ID=ID)
+        for i in outquestion:
+            print(i.ID)
+        print(outquestion)
+    elif request.method == "POST":
+        questionGroups = android_models.QuestionGroup.objects.get(ID=ID)
+
+        IDarray = request.POST.get('groupsID')
+        print(request.POST, IDarray)
+
+        for i in IDarray:
+            if i != ',':
+                try:
+                    questionGroups.members.get(ID=i)
+                    continue
+                except:
+                    question = android_models.Question.objects.get(ID=i)
+                    membership = android_models.QuestionMembership(question=question, group=questionGroups)
+                    membership.save()
+                    print(membership)
+                    questionGroups.count += 1
+        questionGroups.save()
+        inquestion = questionGroups.members.all()
+        for i in IDarray:
+            if i != ',':
+                try:
+                    questionGroups.members.get(ID=i)
+                    inquestion = inquestion.exclude(ID=i)
+                    print(inquestion, 5)
+                    continue
+                except:
+                    pass
+        print(inquestion, 6)
+        for i in inquestion:
+            membership = android_models.QuestionMembership.objects.get(question=i, group=questionGroups)
+            questionGroups.count -= 1
+            membership.delete()
+        questionGroups.save()
+        return JsonResponse(json.dumps({"success": "y"}), safe=False)
+    return render(request, 'login/admin_question_groups_update.html', locals())
 
 
 def admin_question_upload(request):

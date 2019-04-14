@@ -30,7 +30,9 @@ urlpatterns = [
                       path(r'upload/', views.admin_question_upload, name='question_upload'),
                       path(r'search/<str:arg>/', views.admin_question_search, name='question_search'),
                       path(r'download/', views.question_download, name='download_account'),
-                      path(r'groups/new', views.admin_question_groups_new, name="question_groups_new"),
+                      path(r'groups/new/', views.admin_question_groups_new, name="question_groups_new"),
+                      path(r'groups/update/<int:ID>/', views.admin_question_groups_update,
+                           name="question_groups_update"),
                   ])),
                   path('account/', include([
                       path(r'', views.admin_account),
